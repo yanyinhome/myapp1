@@ -1,0 +1,55 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+ul{margin-bottom: 0}
+/* reset */
+/* 公共样式表 */
+*{margin:0;padding: 0;}
+html,body{ background:#fff;}
+table{border-collapse:collapse;border-spacing:0;}
+caption,th{font-weight:normal;}
+small{font-size:80%;}
+pre,code,kbd,samp{font-family:inherit;}
+q:before,q:after{content:none;}
+textarea{overflow:auto;resize:none;}
+label,summary{cursor:default;}
+a,button{cursor:pointer;}
+ins,u,s,a,a:hover{text-decoration:none;}
+img{overflow: hidden;border: 0 none;vertical-align: middle; }
+
+/* 文字排版*/
+.fb{ font-weight:bold;}.fm{ font-weight:bolder;}
+.t2{ text-indent:2em;}
+.unl{ text-decoration:underline;}.nonl{ text-decoration:none;}
+/*定位*/
+.tl{ text-align:left;}.tr{ text-align:right;}.tc{ text-align:center;}
+.fl{ float:left;}
+.fr{ float:right;}
+.vm{ vertical-align:middle;}
+.pr{ position:relative;}.pa{ position:absolute;}
+.none{ display:none;}
+
+/*边距*/
+.container{margin: 0 auto;width: 1200px;}
+.ctp{margin:0 auto;padding: 0 15px;}
+/*基本标签*/
+ol, ul, li{ list-style:none; }
+b, strong { font-weight:bold; }
+a { text-decoration:none; vertical-align:baseline; -webkit-transition:all 0.2s ease; -moz-transition:all 0.2s ease; transition:all 0.2s ease; color:#666; }
+a:hover { text-decoration:none; }
+a:hover, a:focus, a:active { outline:0; }
+body { font-size:12px; -ms-word-break:break-all; -webkit-word-break:break-all; -moz-word-break:break-all; word-break:break-word; word-wrap:break-word; overflow-wrap:break-word; background:#fff; color:#333; font-family:Arial, "Microsoft YaHei"; }
+
+/*自定义公共类样式*/
+.border-box,
+.border-box::before,
+.border-box::after{ -webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box; }
+.font-one { font-family:Arial, "Microsoft YaHei"; }
+.font-two { font-family:arial, 'Hiragino Sans GB', \5b8b\4f53, sans-serif; }
+.clear { clear:both;  display:block;font-size:0;height:0;line-height:0;overflow:hidden;}
+.clearfix { zoom:1; }
+.clearfix::after,.clearfix::before { display:block; clear:both; visibility:hidden; height:0; content:''; }
+.border-none { border:none !important; }
+

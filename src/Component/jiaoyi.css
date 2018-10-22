@@ -1,0 +1,16 @@
+ #accountlist h1, .container .translantion h1{background:linear-gradient(to right,#856320,#c2c0c0);}
+ #accountlist h1, .container .translantion h1{height:50px;line-height: 50px;padding-left: 35px;}
+ #accountlist table{text-align: center;font-size: 18px;width: 100%;}
+ #accountlist table tr{height: 50px;line-height: 50px;}
+ #accountlist table td{background: #eae0d6;}
+ #accountlist table td:nth-child(1){width: 100px;color: #c79127;}
+ #accountlist table td:nth-child(2){width: 500px;color: #856320;}
+ #accountlist table td:nth-child(3){width: 300px;color: #f2a406;}
+ .translantion  form{background:#eae0d6;text-align: center;padding:20px 0; }
+ .translantion  label{font-size: 24px;color: #33302e;text-align: center;height: 35px;line-height: 35px;}
+ .translantion  input{font-size: 18px;color: #856320;margin: 0 10px;height: 35px;line-height: 35px;width: 300px;border-radius: 5px;border: 1px solid #ccc;}
+ .translantion  #transferAmount{width: 100px;}
+ .translantion  button{margin-top:10px;margin-left: 30px;font-size: 18px;height: 35px;line-height: 35px;background: #856320;border: 1px solid #403d3a;border-radius: 3px;padding: 0 5px; }
+ .translantion  button:hover{color: #eae0d6;}
+ .translantion .jiaoyi>button:nth-of-type(2),.container .translantion .jiaoyi>button:nth-of-type(1){width: 80px;}
+ .chaxun{background:#eae0d6;text-align: center;}

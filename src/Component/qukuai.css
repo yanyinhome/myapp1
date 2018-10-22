@@ -1,0 +1,5 @@
+.qukuai table{border: 1px solid #c2c0c0;text-align: center;width: 1200px;}
+.qukuai table tr:nth-child(2n+3){background: #f8f3ef;}
+.qukuai th{border: 1px solid #ccc;color:#c79127;height: 70px;line-height: 60px;font-size: 18px;}
+.qukuai td{border: 1px solid #ccc;color: #5a5244;height: 70px;line-height: 70px;font-size: 18px;}
+.info{height: 50px;line-height: 50px;font-size: 18px;color: #33302e;padding-left:36px;}
