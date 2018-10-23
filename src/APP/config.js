@@ -1,7 +1,7 @@
 import account from '../../static/img/account.png';
 import block from '../../static/img/block.png';
 import copy from '../../static/img/copy.png';
-import log from '../../static/img/log.png';
+// import log from '../../static/img/log.png';
 import app from '../APP/app';
 
 // 获取节点信息赋值给config
@@ -56,10 +56,10 @@ for(let i=nowblock;i>nowblock-50;i--){
 const Config={
     // 菜单列表及显示图片
     imgarry:[
-        {id:1,value:"以太币",img:account,link:"./"},
-        {id:2,value:"汇金币",img:block,link:"./qukuai"},
-        {id:3,value:"币币交易",img:copy,link:"./jiaoyi"},
-        {id:4,value:"日志",img:log,link:"./rizhi"},
+        {id:1,value:"概况",img:account,link:"/"},
+        {id:2,value:"发送",img:block,link:"/token"},
+        {id:3,value:"交易",img:copy,link:"/transaction"},
+        // {id:4,value:"日志",img:log,link:"./rizhi"},
         // {id:5,value:"代币",img:log,link:"./token"},
         ],
         // head下内容显示列表
@@ -77,14 +77,12 @@ const Config={
         Loading:'',
         // path路径 及对应的组件地址（该路径是虚拟的，地址是真实的）
         pathconfig:{
-            home:{path:"/",url:"./home"},
-            jiaoyi:{path:"/jiaoyi",url:"./jiaoyi"},
-            rizhi:{path:"/rizhi",url:"./rizhi"},
-            qukuai:{path:"/qukuai",url:"./qukuai"},//可以添加正则
-            admin:{path:"/admin",url:"./admin"},
-            shezhi:{path:"/shezhi",url:"./shezhi"},
-            register:{path:"/register",url:"./register"},
-            load:{path:"/load",url:"./load"}
+            show:{path:"/",url:"/"},
+            token:{path:"/token",url:"/token"},//可以添加正则
+            account:{path:"/account",url:"/account"},
+            shezhi:{path:"/seting",url:"/seting"},
+            register:{path:"/loogin",url:"/login"},
+            load:{path:"/login",url:"/login"}
         },
     },
     // 账户列表

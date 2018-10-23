@@ -11,7 +11,7 @@ import Config from '../../APP/config';
 class SearchInput extends Component{
     render() {
         return (
-          <div className="left">
+          <div className="left" style={{marginRight:"40px"}}>
             <Input placeholder="请输入内容" size="small"  append={<Button type="primary" icon="search">搜索</Button>} />
           </div>
         )
@@ -39,15 +39,19 @@ export default class Head extends  Component{
         super(props);
         this.state={
             imgarry:Config.imgarry,
+            loadstate:"登录"
         }
     }
-    showvalue(e){console.log(e.target.value)}
+    componentDidMount(){
+        // 从服务器调用是否登录的验证并更改状态
+    }
     render(){
         return(
             <div className="top">
+                <div className='container'>
                 <div className="fr">
                <ul>
-               <Loadroute loadstate={this.props.loadstate}/>
+               <Loadroute loadstate={this.state.loadstate}/>
                 <Loginroute/>
                 <li>
                 <Link to={Config.routerconfig.pathconfig.shezhi.url}><img src={set} alt=""></img></Link>
@@ -55,13 +59,14 @@ export default class Head extends  Component{
                </ul>
                 </div>
                 <div className="title"><img src={logo} alt=""></img></div>
-                <div className='container'>
+                <div>
                     <div className='left'>
                         <Itemlist imgarry={this.state.imgarry}/>
                     </div>
                     <div className='right'>
                         <SearchInput/>
                     </div>
+                </div>
                 </div>
             </div>
         );

@@ -22,7 +22,6 @@ const Show=Loadable({
         loading:Loading});     
 export default class Main extends Component{
     componentDidMount(){
-        console.log(this.props.match.url)
     }
     render(){
         return(
