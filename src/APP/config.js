@@ -1,8 +1,8 @@
-import account from './img/account.png';
-import block from './img/block.png';
-import copy from './img/copy.png';
-import log from './img/log.png';
-import app from './myseltComponent/app1';
+import account from '../../static/img/account.png';
+import block from '../../static/img/block.png';
+import copy from '../../static/img/copy.png';
+import log from '../../static/img/log.png';
+import app from '../APP/app';
 
 // 获取节点信息赋值给config
 const nodemessage={};

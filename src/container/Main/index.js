@@ -33,20 +33,6 @@ export default class Main extends Component{
                 <Route path={`${this.props.match.url}account`} exact component={Account}></Route>
                 <Route path={`${this.props.match.url}transaction`} exact component={Transaction}></Route>
                 <Route path={`${this.props.match.url}seting`} exact component={Seting}></Route>
-                {/* <Router>
-                        <Switch>
-                                <Route exact path={`${this.props.match.url}`} Component={Show}>
-                                        <Router>
-                                                <Switch>
-                                                        <Route path={`${this.props.match.url}/Balance`} Component={Balance}></Route>
-                                                        <Route path={`${this.props.match.url}/Historys`} Component={Historys}></Route>
-                                                        <Route path={`${this.props.match.url}/LinkMan`} Component={LinkMan}></Route>
-                                                </Switch>
-                                        </Router>
-                                </Route>
-                                
-                        </Switch>
-                </Router> */}
             </div>
         )
     }
