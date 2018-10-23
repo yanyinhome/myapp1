@@ -8,6 +8,9 @@ const Login=Loadable({
 const Main=Loadable({
         loader:()=> import('../container/Main'),
         loading:Loading});       
+const Loaded=Loadable({
+        loader:()=> import('../container/Login/loaded'),
+        loading:Loading});       
 class RouteMap extends Component{
     render(){
         return(

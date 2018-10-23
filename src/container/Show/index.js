@@ -18,7 +18,6 @@ export default class Show extends Component{
     }
     ChangeShow=(key,e)=>{
         const self=this;
-        console.log(key.props.name)
         switch (key.props.name) {
             case "1":
             this.props.history.push(`${self.props.match.url}`)
@@ -43,8 +42,8 @@ export default class Show extends Component{
                 </Tabs>
                 <div className="container">
                 <Route path={`${this.props.match.url}`} exact component={Balance}></Route>
-                <Route path={`${this.props.match.url}historys`} exact component={Historys}></Route>
-                <Route path={`${this.props.match.url}linkMan`} exact component={LinkMan}></Route>
+                <Route path={`${this.props.match.url}historys`}  component={Historys}></Route>
+                <Route path={`${this.props.match.url}linkMan`}  component={LinkMan}></Route>
                 </div>
             </div>
         )

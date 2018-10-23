@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import {Route } from 'react-router-dom';
+import {Route,Switch} from 'react-router-dom';
 import Loadable from 'react-loadable';
 const Loading = () => <div>Loading...</div>;
 const Head=Loadable({
@@ -27,11 +27,13 @@ export default class Main extends Component{
         return(
             <div>
                 <Head/>
+                <Switch>
+                <Route path={`${this.props.match.url}token`}  component={Token}></Route>
+                <Route path={`${this.props.match.url}account`}  component={Account}></Route>
+                <Route path={`${this.props.match.url}transaction`}  component={Transaction}></Route>
+                <Route path={`${this.props.match.url}seting`}  component={Seting}></Route>
                 <Route path={`${this.props.match.url}`} component={Show}></Route>
-                <Route path={`${this.props.match.url}token`} exact component={Token}></Route>
-                <Route path={`${this.props.match.url}account`} exact component={Account}></Route>
-                <Route path={`${this.props.match.url}transaction`} exact component={Transaction}></Route>
-                <Route path={`${this.props.match.url}seting`} exact component={Seting}></Route>
+                </Switch>
             </div>
         )
     }
