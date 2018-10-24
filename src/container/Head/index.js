@@ -7,6 +7,7 @@ import {Itemlist} from "../../Component/publicConponent";
 import{Input,Button} from "element-react";
 import "element-theme-default";
 import Config from '../../APP/config';
+import userService from "../../services/userServices";
 // 搜索框
 class SearchInput extends Component{
     render() {
@@ -43,7 +44,14 @@ export default class Head extends  Component{
         }
     }
     componentDidMount(){
+        const self=this;
         // 从服务器调用是否登录的验证并更改状态
+        userService.userInfo().then(
+            res=>{
+                console.log(res.data);
+               self.setState({loadstate:res.data.username})
+                
+            })
     }
     render(){
         return(

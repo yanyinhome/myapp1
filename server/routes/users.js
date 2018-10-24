@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var MessageSQL=require('../db/messagesql');
+var DBconfig=require('../db/DBconfig');
+var responseClient=require("../util/util");
 var Web3=require("web3");
 var web3;
 //创建web3对象
@@ -11,15 +14,8 @@ if (typeof web3 !== 'undefined') {
 };
 // 引入数据库
 var mysql=require("mysql");
-const hjznconfig={
-  host:"127.0.0.1",
-  user:"root",
-  password:"123456",
-  database:'test',
-  port:"3306"
-}
-// 创建客户端
-const client=mysql.createConnection(hjznconfig);
+// 创建数据库客户端
+const client=mysql.createConnection(DBconfig.mysql);
 client.connect((err,result)=>{
   if(err){
     console.log(err);
@@ -27,52 +23,57 @@ client.connect((err,result)=>{
     console.log(result)
   }
 });
-
-// register 下级文件
-router.post('/children', function(req, res, next) {
-  // let result=web3.personal.newAccount("123456");
-  console.log(req.cookies)
-  
-  if(req.session.username||req.cookies.username){
-    
-    // res.redirect('/');
-    console.log(req.session)
-    res.send("你已经登录");
-    console.log("1")
+// client.query('SELECT * from message WHERE username = ? and password = ?',["xyz","12345678"],function(err,result){
+//   console.log(result,0)
+// })
+// 登录验证处理
+router.post('/login', function(req, res, next) {
+  console.log(1,req.cookies)
+  console.log(2,req.session.user) 
+  if(req.session.use&&req.cookies.user){
+    if(req.session.use.username===req.body.username)   
+    responseClient(res, 200, 1, '登录成功',{username:req.body.username})
   }else{
-    
-    req.session.username="lilei";
-    res.cookie('username', "lilei", { maxAge: 60 * 1000, singed: true})
-    res.send("你还未登录，请登录")
+    let params=req.body;
+    client.query('SELECT * from message WHERE username = ? and password = ?',[params.username,params.password],function(err,result){
+      if(err){
+        console.log(err)
+      }else{
+        console.log(result.length)
+        if(result.length===0){          
+          responseClient(res, 200, 2, '用户名或密码错误')
+        }else{
+          if (result[0].username === params.username && result[0].password === params.password) {
+            // res.end(JSON.stringify({status:'100',msg:'登录成功'}));
+            let user = {
+                _id:result[0].id,
+                username:result[0].username
+            }
+            // 添加seesion和cookie验证
+            req.session.user=user;
+            res.cookie('user', user, { expires: new Date(Date.now() + 900000), httpOnly: true });
+            responseClient(res, 200, 1, '登录成功')
+        }
+        }
+      }
+    })
   }
 });
-router.get('/children', function(req, res, next) {
-  console.log(req.body) 
-  res.send('下级文件');
-});
-/* GET users listing. */
-router.post('/', function(req, res, next) {
-  // console.log(req.body.telnumber);
-  let query='INSERT INTO message(telnumber,password,email) VALUES (?,?,?)';
-  let addparams=[];
-  const data=req.body;
-  for(let item in data){    
-    if(item!=="check"){
-      console.log(item,data[item])
-      addparams.push(data[item])
-    }
-  }
-  if(addparams.length!==0){
-    client.query(query,addparams,function(err,result){
-    if(err){
-      console.log(err)     
-    }else{
-      console.log(result)
-      res.json("ture");
-    }
-    // client.end();
-  })  
-  }
+// 注册提交处理
+router.post('/register',function(req,res,next){
+      // let result=web3.personal.newAccount("123456");
+})
+// 昵称修改处理
+router.post("/nameChange",function(req,res,next){
+
+})
+// 用户信息获取处理
+router.get('/userInfo', function(req, res, next) {
+  console.log(req.session.user,1)
+  console.log(req.cookies,2)
+  let data=req.session.user;
+  console.log(data)
+  responseClient(res, 200, 1, '登录成功',data)
 });
 
 module.exports = router;

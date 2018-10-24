@@ -1,6 +1,7 @@
 import React,{Component} from "react";
-import {Button,Layout,Form,Input}  from "element-react";
+import {Button,Layout,Form,Input,Notification}  from "element-react";
 import "element-theme-default";
+import userService from "../../services/userServices";
 export default class Login extends Component{
     constructor(props) {
         super(props);      
@@ -10,8 +11,8 @@ export default class Login extends Component{
             load:"false",
         },
           form: {
-            pass: '',
-            username: ''
+            username: '',
+            pass: ''
           },
           rules: {
             pass: [
@@ -30,26 +31,33 @@ export default class Login extends Component{
             ],
             username: [
               { required: true, message: '请输入用户名', trigger: 'blur' },
-              { validator: (rule, value, callback) => {
-                let number=/^13[0-9]{9}$/;
-                let email=/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
-                if(number.test(value)||email.test(value)){
-                    callback()
-                }else{
-                    callback("用户名格式不正确")
-                }
-              }, trigger: 'change' }
             ]
           }
         };
       }
-      
+      componentDidMount(){
+        // 验证，做一个判断，如果已经登录则跳转
+      }
       handleSubmit(e) {
         e.preventDefault();
       
         this.refs.form.validate((valid) => {
           if (valid) {
-            alert('submit!');
+            userService.Login({
+              username:this.state.form.username,
+              password:this.state.form.pass,
+          }).then((data)=>{
+            if(data){
+              console.log("登录成功res",data)
+              Notification.success({message:data.message});
+              this.props.history.push('/')
+            }else{
+              Notification.error({message:"用户名或者密码错误"})
+            }                 
+              // this.context.router.push('/')
+          }).catch((err)=>{
+              console.log("登录失败res",err)
+          })
           } else {
             console.log('error submit!!');
             return false;
@@ -80,7 +88,7 @@ export default class Login extends Component{
                         <Input value={this.state.form.username} onChange={this.onChange.bind(this, 'username')} autoComplete="off" placeholder="请输入手机或者邮箱" style={{width:"15rem"}}/>
                         </Form.Item>
                         <Form.Item prop="pass">
-                        <Input value={this.state.form.pass} onChange={this.onChange.bind(this, 'pass')} placeholder="请输入密码" style={{width:"15rem"}}></Input>
+                        <Input type="password" value={this.state.form.pass} onChange={this.onChange.bind(this, 'pass')} placeholder="请输入密码" style={{width:"15rem"}}></Input>
                         </Form.Item>
                         <Form.Item>
                         <Button type="primary" onClick={this.handleSubmit.bind(this)} style={{width:"15rem"}}>登录</Button>

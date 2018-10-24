@@ -5,7 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-let token=require('./routes/token');
+var token=require('./routes/token');
+var eth=require('./routes/eth')
 var bodyParser = require("body-parser");
 var expresssession=require("express-session")
 var app = express();
@@ -44,8 +45,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 // 处理用户管理
 app.use('/users', usersRouter);
-//处理代币路径
+//处理代币
 app.use('/token',token)
+// 处理以太币
+app.use('/eth',eth)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
