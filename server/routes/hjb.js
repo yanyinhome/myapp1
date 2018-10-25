@@ -27,7 +27,6 @@ client.connect((err,result)=>{
 // 返回Hjb账户信息
 router.get('/hjbaccount', function(req, res, next) {
     if(req.session.user.hjb_number){
-      console.log(0)
       let data=req.session.user;
       responseClient(res,200,1,"ok",data);
     }else{
@@ -41,12 +40,8 @@ router.get('/hjbaccount', function(req, res, next) {
                 let hjbabi=JSON.parse(result[0].contract_abi).abi;
                 let contract_address=result[0].contract_address;
                 let user_address=req.session.user.address;
-                console.log(typeof hjbabi,1);
-                console.log(user_address,2);
                 const hjb_contract=web3.eth.contract(hjbabi).at(contract_address);
-                console.log(hjb_contract,3);
                 let hjb_number=hjb_contract.balanceOf.call(user_address).toString();
-                console.log(hjb_number,4);
                 req.session.user.hjb_number=hjb_number;
                 let data=req.session.user;
                 responseClient(res,200,1,"ok",data);

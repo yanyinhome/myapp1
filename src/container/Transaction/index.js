@@ -15,7 +15,8 @@ export default class Token extends Component{
                             </Layout.Col>
                             <Layout.Col span="12">
                                 <div className="grid-content bg-purple-light">
-                                已有x个区块确认交易
+                                <p>交易地址：hash</p>
+                                <p>已有x个区块确认交易</p>
                                 </div>
                             </Layout.Col>
                         </Layout.Row>     
