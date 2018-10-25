@@ -35,7 +35,7 @@ router.post('/login', function(req, res, next) {
     responseClient(res, 200, 1, '登录成功',{username:req.body.username})
   }else{
     let params=req.body;
-    client.query('SELECT * from message WHERE username = ? and password = ?',[params.username,params.password],function(err,result){
+    client.query(MessageSQL.getUserByInfo,[params.username,params.password],function(err,result){
       if(err){
         console.log(err)
       }else{
@@ -69,11 +69,13 @@ router.post("/nameChange",function(req,res,next){
 })
 // 用户信息获取处理
 router.get('/userInfo', function(req, res, next) {
-  console.log(req.session.user,1)
-  console.log(req.cookies,2)
   let data=req.session.user;
-  console.log(data)
-  responseClient(res, 200, 1, '登录成功',data)
+  if(data){
+    responseClient(res, 200, 1, '登录成功',data)
+  }else{
+    responseClient(res,200,1,"未登录")
+  }
+  
 });
 
 module.exports = router;

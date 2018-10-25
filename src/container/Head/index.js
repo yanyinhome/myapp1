@@ -19,18 +19,25 @@ class SearchInput extends Component{
       }      
 }
 // 登录组件
-class  Loadroute extends Component{
+class  Unload extends Component{
     render(){
         return(
-            <li className="register"><Link to={Config.routerconfig.pathconfig.load.url}>{this.props.loadstate}</Link></li>
+            <ul>
+                <li className="register"><Link to={Config.routerconfig.pathconfig.load.url}>{this.props.loadstate}</Link></li>
+                <li className="register"><Link to={Config.routerconfig.pathconfig.register.url}>注册</Link></li>
+                <li><Link to={Config.routerconfig.pathconfig.shezhi.url}><img src={set} alt=""></img></Link></li>
+            </ul>
         )
     }
 }
 // 注册组件
-class  Loginroute extends Component{
+class  Isload extends Component{
     render(){
         return(
-            <li className="register"><Link to={Config.routerconfig.pathconfig.register.url}>注册</Link></li>
+            <ul>
+                <li className="register"><a>{this.props.loadstate}</a></li>
+                <li><Link to={Config.routerconfig.pathconfig.shezhi.url}><img src={set} alt=""></img></Link></li>
+            </ul>
         )
     }
 }
@@ -40,7 +47,8 @@ export default class Head extends  Component{
         super(props);
         this.state={
             imgarry:Config.imgarry,
-            loadstate:"登录"
+            loadstate:"登录",
+            isloaded:false,
         }
     }
     componentDidMount(){
@@ -48,23 +56,23 @@ export default class Head extends  Component{
         // 从服务器调用是否登录的验证并更改状态
         userService.userInfo().then(
             res=>{
-                console.log(res.data);
-               self.setState({loadstate:res.data.username})
-                
+                if(Object.keys(res.data).length!==0){
+                    self.setState({loadstate:res.data.username,isloaded:true})
+                }              
             })
     }
     render(){
+        let loadshow=null;
+        if(this.state.isloaded){
+            loadshow = <Isload loadstate={this.state.loadstate}/>;
+        }else{
+            loadshow = <Unload loadstate={this.state.loadstate}/>;
+        }
         return(
             <div className="top">
                 <div className='container'>
                 <div className="fr">
-               <ul>
-               <Loadroute loadstate={this.state.loadstate}/>
-                <Loginroute/>
-                <li>
-                <Link to={Config.routerconfig.pathconfig.shezhi.url}><img src={set} alt=""></img></Link>
-                </li>
-               </ul>
+                {loadshow}
                 </div>
                 <div className="title"><img src={logo} alt=""></img></div>
                 <div>

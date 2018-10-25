@@ -60,7 +60,7 @@ export default class Login extends Component{
           })
           } else {
             console.log('error submit!!');
-            return false;
+            return false ;
           }
         });
       }
