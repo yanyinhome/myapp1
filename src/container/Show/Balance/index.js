@@ -1,6 +1,7 @@
 import React,{Component} from "react";
 import{Collapse,Tooltip} from "element-react";
-import EthService from "../../../services/EthServices"
+import EthService from "../../../services/EthServices";
+import HjbService from "../../../services/HjbService";
 import "element-theme-default";
 export default class Balance extends Component{
     constructor(props){
@@ -23,6 +24,16 @@ export default class Balance extends Component{
                 if(res){
                     if(Object.keys(res.data).length!==0){
                         self.setState({address:res.data.address,ETH:{number:res.data.eth_number}})
+                    } 
+                }
+                   
+            }
+        )
+        HjbService.HjbAccounts().then(
+            res=>{
+                if(res){
+                    if(Object.keys(res.data).length!==0){
+                        self.setState({address:res.data.address,HJB:{number:res.data.hjb_number?res.data.hjb_number:0}})
                     } 
                 }
                    

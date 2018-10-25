@@ -12,7 +12,7 @@ if (typeof web3 !== 'undefined') {
   // set the provider you want from Web3.providers
    web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.124.2:8486"));
 };
-// 返回ETH和HJB的账户信息
+// 返回ETH的账户信息
 router.get('/ethaccount', function(req, res, next) {
     let data=req.session.user;
     if(data){

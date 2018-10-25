@@ -7,10 +7,7 @@ const Login=Loadable({
         loading:Loading});   
 const Main=Loadable({
         loader:()=> import('../container/Main'),
-        loading:Loading});       
-const Loaded=Loadable({
-        loader:()=> import('../container/Login/loaded'),
-        loading:Loading});       
+        loading:Loading});      
 class RouteMap extends Component{
     render(){
         return(

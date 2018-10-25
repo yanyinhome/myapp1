@@ -20,7 +20,7 @@ client.connect((err,result)=>{
   if(err){
     console.log(err);
   }else{
-    console.log(result)
+    console.log("use连接数据库结果",result)
   }
 });
 // client.query('SELECT * from message WHERE username = ? and password = ?',["xyz","12345678"],function(err,result){
@@ -36,7 +36,6 @@ router.post('/login', function(req, res, next) {
       if(err){
         console.log(err)
       }else{
-        console.log(result.length)
         if(result.length===0){          
           responseClient(res, 200, 2, '用户名或密码错误')
         }else{
