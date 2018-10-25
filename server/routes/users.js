@@ -28,10 +28,7 @@ client.connect((err,result)=>{
 // })
 // 登录验证处理
 router.post('/login', function(req, res, next) {
-  console.log(1,req.cookies)
-  console.log(2,req.session.user) 
-  if(req.session.use&&req.cookies.user){
-    if(req.session.use.username===req.body.username)   
+  if(req.session.user&&req.cookies.user){   
     responseClient(res, 200, 1, '登录成功',{username:req.body.username})
   }else{
     let params=req.body;
@@ -47,7 +44,8 @@ router.post('/login', function(req, res, next) {
             // res.end(JSON.stringify({status:'100',msg:'登录成功'}));
             let user = {
                 _id:result[0].id,
-                username:result[0].username
+                username:result[0].username,
+                address:result[0].address
             }
             // 添加seesion和cookie验证
             req.session.user=user;

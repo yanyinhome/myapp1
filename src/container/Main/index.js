@@ -21,6 +21,9 @@ const Seting=Loadable({
 const Show=Loadable({
         loader:()=>import("../Show"),
         loading:Loading});     
+const Foot=Loadable({
+        loader:()=>import("../Foot"),
+        loading:Loading});     
 export default class Main extends Component{
     componentDidMount(){
        
@@ -36,6 +39,7 @@ export default class Main extends Component{
                 <Route path={`${this.props.match.url}seting`}  component={Seting}></Route>
                 <Route path={`${this.props.match.url}`} component={Show}></Route>
                 </Switch>
+                <Foot/>
             </div>
         )
     }

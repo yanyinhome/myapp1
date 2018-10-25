@@ -18,3 +18,36 @@
 .top .fr li a{font-size: 14px;color: #fff;display: inline-block;margin-right: 20px;}
 .top .fr li a:hover{color: #7a98f7;}
 .top .fr li a img{width: 18px;height:18px;}
+/* 底部 */
+  .tail{
+    margin-top: 15px;
+    border-top: 1px solid #ccccca;
+    font: 12px OpenSansRegular;
+    color: #8391a5;
+  }
+  .tail-left{
+    width: 25%;
+    padding-top: 8px;
+    margin-left: 10px;
+    cursor: pointer;
+    float: left;
+  }
+  .tail-fight{
+    cursor: pointer;
+    padding-top: 8px;
+    margin-right: 10px;
+    float: right;
+    text-align: right;
+  }
+  .tail-fight>a{
+    padding-right: 5px;
+    margin-right: 5px;
+    border-right: 1px solid #8391a5;
+  }
+  .tail-fight>a:hover{
+      color:#1f2d3d; 
+  }
+  .tail-fight>a:last-child{
+    border-right: none; 
+  }
+  

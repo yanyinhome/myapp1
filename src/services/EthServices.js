@@ -5,6 +5,16 @@ import Xhr from "../utils/xhr"
     constructor(){
         this.url=url.development
     }
+    // 账户信息获取
+    EthAccounts(data){
+        return Xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/eth/ethaccount",
+            data:{
+                ...data
+            }
+        })
+    }
     // 以太币转账
     EthSend(data){
         return Xhr({

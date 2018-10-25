@@ -18,19 +18,18 @@ class SearchInput extends Component{
         )
       }      
 }
-// 登录组件
+//未登录组件
 class  Unload extends Component{
     render(){
         return(
             <ul>
                 <li className="register"><Link to={Config.routerconfig.pathconfig.load.url}>{this.props.loadstate}</Link></li>
                 <li className="register"><Link to={Config.routerconfig.pathconfig.register.url}>注册</Link></li>
-                <li><Link to={Config.routerconfig.pathconfig.shezhi.url}><img src={set} alt=""></img></Link></li>
             </ul>
         )
     }
 }
-// 注册组件
+// 已登录组件
 class  Isload extends Component{
     render(){
         return(
@@ -49,6 +48,7 @@ export default class Head extends  Component{
             imgarry:Config.imgarry,
             loadstate:"登录",
             isloaded:false,
+            address:"",
         }
     }
     componentDidMount(){
@@ -56,9 +56,11 @@ export default class Head extends  Component{
         // 从服务器调用是否登录的验证并更改状态
         userService.userInfo().then(
             res=>{
+               if(res){
                 if(Object.keys(res.data).length!==0){
-                    self.setState({loadstate:res.data.username,isloaded:true})
-                }              
+                    self.setState({loadstate:res.data.username,isloaded:true,address:res.data.address})
+                }     
+               }         
             })
     }
     render(){
