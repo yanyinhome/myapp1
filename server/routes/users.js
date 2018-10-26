@@ -74,5 +74,11 @@ router.get('/userInfo', function(req, res, next) {
   }
   
 });
+// 注销登录
+router.get('/logout',function(req,res,next){
+  delete req.session.user;//退出时删除保存的user
+  res.clearCookie(req.sessionID);//退出系统时清空cookie
+  responseClient(res,200,1,"已注销")
+})
 
 module.exports = router;

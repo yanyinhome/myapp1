@@ -34,7 +34,11 @@ class  Isload extends Component{
     render(){
         return(
             <ul>
-                <li className="register"><a>{this.props.loadstate}</a></li>
+                <li className="register" style={{position:"relative"}}>
+                    <a onClick={this.props.toggle}>{this.props.loadstate}</a>
+                    <a  style={{position:"absolute",top:"65px",height:"40px",lineHeight:"40px",fontSize:" 16px",color:"#346aa9",width: "50px",left:"0px",margin:"0",zIndex:"100",background:"#f3f3f3",textAlign:"center",display:this.props.display}}
+                       onClick={this.props.logout}>注销</a>
+                </li>
                 <li><Link to={Config.routerconfig.pathconfig.shezhi.url}><img src={set} alt=""></img></Link></li>
             </ul>
         )
@@ -49,7 +53,22 @@ export default class Head extends  Component{
             loadstate:"登录",
             isloaded:false,
             address:"",
+            toggle_display:true,
+            display:"none",
         }
+    }
+    // 点击显示注销按钮
+    toggle=()=>{
+        this.setState((prevState) => ({
+            toggle_display:prevState.toggle_display?false:true,
+            display:prevState.toggle_display?"block":"none"
+          }))        
+    }
+    // 注销登录函数
+    logout=()=>{
+        userService.logout().then(data=>{console.log(data)})
+        console.log(this)
+        this.props.history.push('/login')
     }
     componentDidMount(){
         const self=this;
@@ -66,7 +85,7 @@ export default class Head extends  Component{
     render(){
         let loadshow=null;
         if(this.state.isloaded){
-            loadshow = <Isload loadstate={this.state.loadstate}/>;
+            loadshow = <Isload loadstate={this.state.loadstate} toggle={this.toggle} display={this.state.display} logout={this.logout}/>;
         }else{
             loadshow = <Unload loadstate={this.state.loadstate}/>;
         }

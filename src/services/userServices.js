@@ -41,5 +41,12 @@ class userServices {
             url:"http://192.168.124.2:3005/users/userInfo"
         })
     }
+    // 注销登录
+    logout(data){
+        return xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/users/logout"
+        })
+    }
 }
 export default new userServices();

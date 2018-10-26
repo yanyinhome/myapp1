@@ -31,7 +31,7 @@ export default class Main extends Component{
     render(){
         return(
             <div>
-                <Head/>
+                <Head history={this.props.history}/>
                 <Switch>
                 <Route path={`${this.props.match.url}token`}  component={Token}></Route>
                 <Route path={`${this.props.match.url}account`}  component={Account}></Route>
