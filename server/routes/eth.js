@@ -41,6 +41,19 @@ router.get('/ethaccount', function(req, res, next) {
     }
     
 });
+// 返回历史记录信息
+router.get("/history",function(req,res,next){
+    let data=req.session.user;
+    if(data){
+        client.query(tourial_historysql.search_all,[data.address],function(err,result){
+            if(err){
+                console.log(err)
+            }else{
+                responseClient(res,200,1,"查询成功",result)
+            }
+        })
+    }
+})
 // 处理发送以太币交易
 router.post("/ethsend",function(req,res,next){
     let data=req.session.user;
@@ -61,13 +74,16 @@ router.post("/ethsend",function(req,res,next){
                           (err,result)=>{
                             if(err){console.log(err);}
                                else{
+                                let time=new Date().toString()
                                 let data={
                                     hash:result,
                                     eth_address:eth_address,
                                     to_address:eth_to,
                                     number:number,
+                                    time:time,
                                 }
-                                client.query(tourial_historysql.insert_tourial,[data.eth_address,data.number,data.to_address,data.hash],function(err,result){
+                                console.log(data);
+                                client.query(tourial_historysql.insert_tourial,[data.eth_address,data.number,data.to_address,data.hash,data.time],function(err,result){
                                     if(err){console.log(err)}else{
                                         console.log(result);
                                     }

@@ -1,9 +1,22 @@
 import React,{Component} from "react";
-import { Tabs,Input,Button,Layout } from 'element-react';
+import { Tabs,Input,Button,Layout,Tag} from 'element-react';
 import EthService from "../../services/EthServices";
 import HjbService from "../../services/HjbService";
 import EthServices from "../../services/EthServices";
 const TabPane = Tabs.Pane;
+// 历史记录显示组件
+export class History extends Component{
+    render(){
+        let historylist=this.props.result.map((item)=><p key={item.hash}>向<Tag type="primary">{item.to_address}</Tag>转账<Tag type="primary">{item.number}</Tag>以太币于<Tag type="gray">{item.time}</Tag>成功<br/>
+        交易hash：<Tag type="warning">{item.hash}</Tag></p>)
+        return(
+            <div className="grid-content bg-purple-light">
+            {historylist}
+            </div>
+        )
+    }
+}
+// 默认导出组件
 export default class Token extends Component{
     constructor(props){
         super(props);
@@ -16,6 +29,7 @@ export default class Token extends Component{
                 hjb_acceptaddrtss:"",
                 hjb_acceptnumber:"",
             },
+            result:[]
         }
     }
     componentDidMount(){
@@ -55,7 +69,13 @@ export default class Token extends Component{
             tourial_address:this.state.form.eth_acceptaddrtss,
             tourial_number:this.state.form.eth_acceptnumber
         }).then(data=>{
-
+            let resultdata=data.data.data
+           this.setState(function(prevState) { 
+            //    prevState.result.push(resultdata)         
+            return {
+                result:[resultdata]
+            };
+          });
         }).catch(err=>{
             console.log("失败",err)
         })
@@ -77,9 +97,9 @@ export default class Token extends Component{
                                 <Button type="primary" onClick={this.handsubmit_eth}>提交</Button>
                             </Layout.Col>
                             <Layout.Col span="12">
-                                <div className="grid-content bg-purple-light">
-                                已有x个区块确认交易
-                                </div>
+                                
+                                <History result={this.state.result}/>
+                                
                             </Layout.Col>
                         </Layout.Row>            
                     </TabPane>

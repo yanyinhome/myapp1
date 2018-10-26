@@ -25,5 +25,15 @@ import Xhr from "../utils/xhr"
             }
         })
     }
+    // 以太币历史记录获取
+    ETHhistory(data){
+        return Xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/eth/history",
+            data:{
+                ...data
+            }
+        })
+    }
 }
 export default new EthService();
