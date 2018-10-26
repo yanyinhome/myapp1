@@ -21,7 +21,7 @@ export default class Login extends Component{
                 if (value === '') {
                   callback(new Error('请输入密码'));
                 } else {
-                    let number=/^[0-9]{8}$/;
+                    let number=/[0-9a-z]/;
                     if(!number.test(value)){
                         callback(new Error("请输入正确的密码"))
                     }

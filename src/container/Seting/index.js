@@ -1,6 +1,7 @@
 import React,{Component} from "react";
 import{Layout} from "element-react";
 import "element-theme-default";
+import userService from '../../services/userServices'
 import './Setting.css';
 export default class Seting extends Component{
     constructor(props){
@@ -11,7 +12,16 @@ export default class Seting extends Component{
         }
     }
     componentDidMount(){
-
+        const self=this;
+        // 从服务器调用是否登录的验证并更改状态
+        userService.userInfo().then(
+            res=>{
+               if(res){
+                if(Object.keys(res.data).length!==0){
+                    self.setState({username:res.data.username,address:res.data.address})
+                }     
+               }         
+            })
     }
     render(){
         return(

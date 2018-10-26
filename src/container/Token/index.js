@@ -2,7 +2,6 @@ import React,{Component} from "react";
 import { Tabs,Input,Button,Layout,Tag} from 'element-react';
 import EthService from "../../services/EthServices";
 import HjbService from "../../services/HjbService";
-import EthServices from "../../services/EthServices";
 const TabPane = Tabs.Pane;
 // 历史记录显示组件
 export class History extends Component{
@@ -29,7 +28,8 @@ export default class Token extends Component{
                 hjb_acceptaddrtss:"",
                 hjb_acceptnumber:"",
             },
-            result:[]
+            ethresult:[],
+            hjbresult:[]
         }
     }
     componentDidMount(){
@@ -64,16 +64,15 @@ export default class Token extends Component{
         });
       }
     handsubmit_eth=()=>{
-        console.log(this.state.form)
-        EthServices.EthSend({
+        EthService.EthSend({
             tourial_address:this.state.form.eth_acceptaddrtss,
             tourial_number:this.state.form.eth_acceptnumber
         }).then(data=>{
-            let resultdata=data.data.data
+            let resultdata=data.data
            this.setState(function(prevState) { 
             //    prevState.result.push(resultdata)         
             return {
-                result:[resultdata]
+                ethresult:[resultdata]
             };
           });
         }).catch(err=>{
@@ -81,7 +80,22 @@ export default class Token extends Component{
         })
     }
     handsubmit_hjb=()=>{
-        console.log(this.state.form)
+        HjbService.HjbSend({
+           to_address:this.state.form.hjb_acceptaddrtss,
+           value:this.state.form.hjb_acceptnumber 
+        }).then(
+            data=>{
+                let resultdata=data.data
+                this.setState(function(prevState) { 
+                 //    prevState.result.push(resultdata)         
+                 return {
+                     hjbresult:[resultdata]
+                 };
+               });
+            }
+        ).catch(err=>{
+            console.log("失败",err)
+        })
     }
     render(){
         return(
@@ -96,10 +110,8 @@ export default class Token extends Component{
                                 <Input value={this.state.form.eth_acceptnumber} onChange={this.onChange.bind(this, 'eth_acceptnumber')} type="text"  style={{width:"20rem",marginRight:"2rem"}}/>
                                 <Button type="primary" onClick={this.handsubmit_eth}>提交</Button>
                             </Layout.Col>
-                            <Layout.Col span="12">
-                                
-                                <History result={this.state.result}/>
-                                
+                            <Layout.Col span="12">                 
+                            <History result={this.state.ethresult}/>                               
                             </Layout.Col>
                         </Layout.Row>            
                     </TabPane>
@@ -113,9 +125,7 @@ export default class Token extends Component{
                                     <Button type="primary" onClick={this.handsubmit_hjb}>提交</Button>
                                 </Layout.Col>
                                 <Layout.Col span="12">
-                                    <div className="grid-content bg-purple-light">
-                                    已有x个区块确认交易
-                                    </div>
+                                <History result={this.state.hjbresult}/> 
                                 </Layout.Col>
                             </Layout.Row>     
                     </TabPane>                 

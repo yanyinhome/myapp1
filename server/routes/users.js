@@ -44,7 +44,8 @@ router.post('/login', function(req, res, next) {
             let user = {
                 _id:result[0].id,
                 username:result[0].username,
-                address:result[0].address
+                address:result[0].address,
+                password:result[0].password,
             }
             // 添加seesion和cookie验证
             req.session.user=user;

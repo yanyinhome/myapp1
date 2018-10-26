@@ -31,6 +31,9 @@ class HjbService{
         return xhr({
             method:"post",
             url:"http://192.168.124.2:3005/hjb/hjbbuy",
+            data:{
+                ...data
+            }
         })
     }
     // Hjb卖出
@@ -38,6 +41,9 @@ class HjbService{
         return xhr({
             method:"post",
             url:"http://192.168.124.2:3005/hjb/hjbsell",
+            data:{
+                ...data
+            }
         })
     }
     // Hjb增发
@@ -45,6 +51,9 @@ class HjbService{
         return xhr({
             method:"post",
             url:"http://192.168.124.2:3005/hjb/admin/zengfa",
+            data:{
+                ...data
+            }
         })
     }
     // Hjb设置买入价格
@@ -52,6 +61,9 @@ class HjbService{
         return xhr({
             method:"post",
             url:"http://192.168.124.2:3005/hjb/admin/setbuyprice",
+            data:{
+                ...data
+            }
         })
     }
     // Hjb设置卖出价格
@@ -59,6 +71,9 @@ class HjbService{
         return xhr({
             method:"post",
             url:"http://192.168.124.2:3005/hjb/admin/setsellprice",
+            data:{
+                ...data
+            }
         })
     }
     // Hjb冻结/解冻账户
@@ -66,6 +81,9 @@ class HjbService{
         return xhr({
             method:"post",
             url:"http://192.168.124.2:3005/hjb/admin/hjbsell",
+            data:{
+                ...data
+            }
         })
     }
 }

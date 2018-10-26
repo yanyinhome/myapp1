@@ -67,7 +67,6 @@ export default class Head extends  Component{
     // 注销登录函数
     logout=()=>{
         userService.logout().then(data=>{console.log(data)})
-        console.log(this)
         this.props.history.push('/login')
     }
     componentDidMount(){

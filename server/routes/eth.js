@@ -45,7 +45,7 @@ router.get('/ethaccount', function(req, res, next) {
 router.get("/history",function(req,res,next){
     let data=req.session.user;
     if(data){
-        client.query(tourial_historysql.search_all,[data.address],function(err,result){
+        client.query(tourial_historysql.search_ethall,[data.address],function(err,result){
             if(err){
                 console.log(err)
             }else{
@@ -57,6 +57,8 @@ router.get("/history",function(req,res,next){
 // 处理发送以太币交易
 router.post("/ethsend",function(req,res,next){
     let data=req.session.user;
+    let password=data.password;
+    console.log(password)
     if(data){
         let eth_address=data.address;
         let eth_to=req.body.tourial_address;
@@ -66,7 +68,7 @@ router.post("/ethsend",function(req,res,next){
                 else{
                     // 判断账户金额是否大于转出值
                     if(parseInt(result.c[0],10)>number){
-                        web3.personal.unlockAccount(eth_address,"hjzn1",15000,(err,result)=>{
+                        web3.personal.unlockAccount(eth_address,password,15000,(err,result)=>{
                         if(err){
                           console.log(err);
                         }else{
@@ -81,14 +83,15 @@ router.post("/ethsend",function(req,res,next){
                                     to_address:eth_to,
                                     number:number,
                                     time:time,
+                                    type:0
                                 }
                                 console.log(data);
-                                client.query(tourial_historysql.insert_tourial,[data.eth_address,data.number,data.to_address,data.hash,data.time],function(err,result){
+                                client.query(tourial_historysql.insert_tourial,[data.eth_address,data.number,data.to_address,data.hash,data.time,data.type],function(err,result){
                                     if(err){console.log(err)}else{
                                         console.log(result);
                                     }
                                 })
-                                responseClient(res,200,1,"转账成功",{data});
+                                responseClient(res,200,1,"转账成功",data);
                             }
                           })
                         }
