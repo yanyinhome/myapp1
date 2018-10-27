@@ -5,6 +5,9 @@ const Loading = () => <div>Loading...</div>;
 const Login=Loadable({
         loader:()=> import('../container/Login'),
         loading:Loading});   
+const Regist=Loadable({
+        loader:()=> import('../container/Login/Rejist'),
+        loading:Loading});   
 const Main=Loadable({
         loader:()=> import('../container/Main'),
         loading:Loading});      
@@ -14,6 +17,7 @@ class RouteMap extends Component{
             <Router>
                 <Switch>
                     <Route  path="/login" component={Login}/>
+                    <Route  path="/regist" component={Regist}/>
                     <Route  path="/" component={Main}>
                     </Route>
                 </Switch>

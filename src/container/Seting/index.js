@@ -11,6 +11,10 @@ export default class Seting extends Component{
             address:"address",
         }
     }
+    // 修改用户名
+    write_username=()=>{
+
+    }
     componentDidMount(){
         const self=this;
         // 从服务器调用是否登录的验证并更改状态
@@ -40,7 +44,7 @@ export default class Seting extends Component{
                             <div className="name">用户名</div>
                             <div className="user">
                                 <div className="user-name">{this.state.username}</div>
-                                <div className="user-compile"><a className="compile">编辑</a></div>
+                                <div className="user-compile"><a className="compile" onClick={this.write_username}>编辑</a></div>
                                 <div style={{clear:"both"}}></div>
                             </div>
                         </div>

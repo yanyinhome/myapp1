@@ -81,7 +81,7 @@ const Config={
             token:{path:"/token",url:"/token"},//可以添加正则
             account:{path:"/account",url:"/account"},
             shezhi:{path:"/seting",url:"/seting"},
-            register:{path:"/loogin",url:"/login"},
+            register:{path:"/regist",url:"/regist"},
             load:{path:"/login",url:"/login"}
         },
     },

@@ -1,0 +1,28 @@
+.wrapper{
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    min-height: 100%;
+    background-color: #ffffff;
+  }
+  .top{
+    height: 100px;
+    margin-top: 0;
+    font: 26px 'OpenSansLight';
+    font-weight: 300;
+    line-height: 100px;
+    color: #ffffff;
+    text-align: center;
+    background: #346aa9;
+    margin-bottom: 10px;
+  }
+  .Tologin{
+    text-align: center;
+  }
+  .Tologin a{
+    color: #428bca;
+    cursor:pointer;
+  }
+  .Tologin a:hover{
+    color: #2a568a;
+  }
