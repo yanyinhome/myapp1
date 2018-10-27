@@ -11,12 +11,16 @@ const Regist=Loadable({
 const Main=Loadable({
         loader:()=> import('../container/Main'),
         loading:Loading});      
+const Admin=Loadable({
+        loader:()=> import('../container/Admin'),
+        loading:Loading});      
 class RouteMap extends Component{
     render(){
         return(
             <Router>
                 <Switch>
                     <Route  path="/login" component={Login}/>
+                    <Route  path="/admin" component={Admin}/>
                     <Route  path="/regist" component={Regist}/>
                     <Route  path="/" component={Main}>
                     </Route>

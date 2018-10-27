@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var MessageSQL=require('../db/messagesql');
+var adminSQL=require('../db/adminSql');
 var DBconfig=require('../db/DBconfig');
 var responseClient=require("../util/util");
 var Web3=require("web3");
@@ -94,10 +95,48 @@ router.get('/userInfo', function(req, res, next) {
   }
   
 });
+
 // 注销登录
 router.get('/logout',function(req,res,next){
   delete req.session.user;//退出时删除保存的user
   res.clearCookie(req.sessionID);//退出系统时清空cookie
+  responseClient(res,200,1,"已注销")
+})
+// 管理页面登录
+router.post('/admin/login', function(req, res, next) {
+  if(req.session.admin&&req.cookies.admin){   
+    responseClient(res, 200, 1, '登录成功',{username:req.body.username})
+  }else{
+    let params=req.body;
+    client.query(adminSQL.getAdminInfo,[params.username,params.password],function(err,result){
+      if(err){
+        console.log(err)
+      }else{
+        if(result.length===0){          
+          responseClient(res, 200, 2, '用户名或密码错误')
+        }else{
+          if (result[0].username === params.username && result[0].password === params.password) {
+            // res.end(JSON.stringify({status:'100',msg:'登录成功'}));
+            let admin = {
+                _id:result[0].id,
+                username:result[0].username,
+                address:result[0].address,
+                password:result[0].password,
+            }
+            // 添加seesion和cookie验证
+            req.session.admin=admin;
+            res.cookie('user', admin, { expires: new Date(Date.now() + 900000), httpOnly: true });
+            responseClient(res, 200, 1, '登录成功')
+        }
+        }
+      }
+    })
+  }
+});
+// 管理页面注销登录
+router.get('/admin/logout',function(req,res,next){
+  // delete req.session.user;//退出时删除保存的user
+  // res.clearCookie(req.sessionID);//退出系统时清空cookie
   responseClient(res,200,1,"已注销")
 })
 
