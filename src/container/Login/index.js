@@ -49,12 +49,18 @@ export default class Login extends Component{
           }).then((data)=>{
             if(data){
               console.log("登录成功res",data)
-              Notification.success({title:"提示",message:data.message,duration: 1000});
-              this.props.history.push('/')
+              Notification.success({
+                title:"提示",
+                message:data.message,
+                duration: 1000,
+                onClose:()=>{
+                  this.props.history.push('/')
+                }
+              });
+              
             }else{
-              Notification.error({title:"提示",message:"用户名或者密码错误",duration: 1000});
+              Notification.error({title:"提示",message:"用户名或者密码错误",duration: 2000});
             }                 
-              // this.context.router.push('/')
           }).catch((err)=>{
               console.log("登录失败res",err)
           })

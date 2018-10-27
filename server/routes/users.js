@@ -59,7 +59,26 @@ router.post('/login', function(req, res, next) {
 });
 // 注册提交处理
 router.post('/register',function(req,res,next){
-      // let result=web3.personal.newAccount("123456");
+  let name=req.body.nickname;
+  let password=req.body.password;
+  console.log(password)
+  web3.personal.newAccount(password,function(err,result){
+    if(err){
+      console.log(err)
+      responseClient(res,200,2,"节点创建新用户失败")
+    }else{
+      console.log(password)
+      client.query(MessageSQL.insert,[name,password,result],function(err,result){
+      if(err){console.log(err)
+      responseClient(res,200,3,"存入数据库失败")}
+        else{
+          responseClient(res,200,1,"即将跳转到登录界面")
+        }
+    })
+    }
+  });
+
+  
 })
 // 昵称修改处理
 router.post("/nameChange",function(req,res,next){

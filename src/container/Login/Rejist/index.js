@@ -1,12 +1,126 @@
 import React,{Component} from "react";
-import {Input,Button} from "element-react";
+import {Input,Button,Form,Layout,Notification} from "element-react";
 import './index.css'
+import "element-theme-default";
+import userServices from "../../../services/userServices"
 export default class Regist extends Component{
+    constructor(props) {
+        super(props);
+      
+        this.state = {
+          form: {
+            nickname: '',
+            pass: '',
+            checkPass: '',           
+          },
+          rules: {
+            pass: [
+              { required: true, message: '请输入密码', trigger: 'blur' },
+              { validator: (rule, value, callback) => {
+                if (value === '') {
+                  callback(new Error('请输入密码'));
+                } else {
+                  if (this.state.form.checkPass !== '') {
+                    this.refs.form.validateField('checkPass');
+                  }
+                  callback();
+                }
+              } }
+            ],
+            checkPass: [
+              { required: true, message: '请再次输入密码', trigger: 'blur' },
+              { validator: (rule, value, callback) => {
+                if (value === '') {
+                  callback(new Error('请再次输入密码'));
+                } else if (value !== this.state.form.pass) {
+                  callback(new Error('两次输入密码不一致!'));
+                } else {
+                  callback();
+                }
+              } }
+            ],
+            nickname: [
+              { required: true, message: '请填写昵称', trigger: 'blur' },
+            ]
+          }
+        };
+      }
+      tologin=()=>{
+          this.props.history.push("/login")
+      }
+      handleSubmit(e) {
+        e.preventDefault();  
+        console.log(this.state.form)    
+        this.refs.form.validate((valid) => {
+          if (valid) {
+            userServices.register(
+                {nickname:this.state.form.nickname,
+                password:this.state.form.pass}
+            ).then(
+                result=>{
+                    if(result.code===1){
+                        Notification({
+                            title: '注册成功',
+                            message: result.message,
+                            type: 'success',
+                            duration:2500,
+                            onClose:()=>{
+                                this.props.history.push("/login")    
+                            }
+                          })
+                    }else{
+                        Notification.error({
+                            title: '错误',
+                            message: result.message,
+                          });
+                    }
+                }
+            ).catch(err=>{
+                console.log(err)
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      }      
+      onChange(key, value) {
+        this.setState({
+          form: Object.assign({}, this.state.form, { [key]: value })
+        });
+      }      
     render(){
         return(
             <div>
                 <div className="wrapper"><header><h1 className="top"> 欢迎来到Qiankun Client，会员专属钱包</h1></header></div>
-                <div className="Tologin"><span>已有账户?</span><a>登陆</a></div>
+                <Layout.Row>
+                    <Layout.Col span="8" offset="8"><div>
+                        <h1 style={{textAlign:"center",padding:" 0 0 30px",margin: "10px 0 0px 0",fontSize:"28px",fontWeight:"normal"}}>注册</h1>   
+                        <Form  ref="form" model={this.state.form} rules={this.state.rules} labelWidth="100" className="demo-ruleForm" labelPosition="top">
+                            <Form.Item label="昵称" prop="nickname">
+                                <Input value={this.state.form.nickname} onChange={this.onChange.bind(this, 'nickname')}></Input>
+                            </Form.Item>
+                            <Form.Item label="密码" prop="pass">
+                                <Input type="password" value={this.state.form.pass} onChange={this.onChange.bind(this, 'pass')} autoComplete="off" />
+                            </Form.Item>
+                            <Form.Item label="确认密码" prop="checkPass">
+                                <Input type="password" value={this.state.form.checkPass} onChange={this.onChange.bind(this, 'checkPass')} autoComplete="off"/>
+                            </Form.Item>
+                            <Form.Item>
+                                <Layout.Row>
+                                    <Layout.Col span="8" offset="8">
+                                        <div>
+                                        <Button style={{width:"250px",height:"60px",fontSize:"18px"}} type="primary" onClick={this.handleSubmit.bind(this)}>注册</Button>
+                                        {/* <Button onClick={this.handleReset.bind(this)}>重置</Button> */}
+                                        </div>
+                                    </Layout.Col>
+                                </Layout.Row>
+                            </Form.Item>
+                        </Form>
+                        </div>  
+                    </Layout.Col>
+                </Layout.Row>
+                <div className="Tologin"><span>已有账户?</span><a onClick={this.tologin}>登陆</a></div>
             </div>
         )
     }
