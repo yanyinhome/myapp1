@@ -43,8 +43,8 @@ router.get('/hjbaccount', function(req, res, next) {
                 let contract_address=result[0].contract_address;
                 let user_address=req.session.user.address;
                 const hjb_contract=web3.eth.contract(hjbabi).at(contract_address);
-                let hjb_number=hjb_contract.balanceOf.call(user_address).toString();
-                req.session.user.hjb_number=hjb_number;
+                let hjb_number=hjb_contract.balanceOf.call(user_address);
+                req.session.user.hjb_number=hjb_number.toString(10);
                 let data=req.session.user;
                 responseClient(res,200,1,"ok",data);
               }

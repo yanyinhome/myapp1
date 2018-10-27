@@ -31,7 +31,7 @@ router.get('/ethaccount', function(req, res, next) {
         web3.eth.getBalance(eth_address,function(err,result){
             if(err){responseClient(res,200,1,"地址错误")}
                 else{
-                    req.session.user.eth_number=result;
+                    req.session.user.eth_number=web3.fromWei(result, 'ether')
                     let data=req.session.user;
                     responseClient(res,200,1,"ok",data);  
                 }
