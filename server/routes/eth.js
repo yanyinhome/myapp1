@@ -41,7 +41,7 @@ router.get('/ethaccount', function(req, res, next) {
     }
     
 });
-// 返回历史记录信息
+// 返回以太币历史记录信息
 router.get("/history",function(req,res,next){
     let data=req.session.user;
     if(data){

@@ -50,27 +50,17 @@ class HjbService{
     HjbZengfa(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/hjb/admin/zengfa",
+            url:"http://192.168.124.2:3005/hjb/add",
             data:{
                 ...data
             }
         })
     }
-    // Hjb设置买入价格
-    HjbSetbuyprice(data){
+    // Hjb设置买入/卖出价格
+    HjbSetPrice(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/hjb/admin/setbuyprice",
-            data:{
-                ...data
-            }
-        })
-    }
-    // Hjb设置卖出价格
-    HjbSetsellprice(data){
-        return xhr({
-            method:"post",
-            url:"http://192.168.124.2:3005/hjb/admin/setsellprice",
+            url:"http://192.168.124.2:3005/hjb/setprice",
             data:{
                 ...data
             }
@@ -80,13 +70,53 @@ class HjbService{
     HjbFroze(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/hjb/admin/hjbsell",
+            url:"http://192.168.124.2:3005/hjb/hjb_frozen",
             data:{
                 ...data
             }
         })
     }
+    // Hjb设置GAS
+    HjbSetGas(data){
+        return xhr({
+            method:"post",
+            url:"http://192.168.124.2:3005/hjb/setgas",
+            data:{
+                ...data
+            }
+        })
+    }
+    // 汇金币转账历史信息获取
+    HJBhistory(data){
+        return xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/hjb/history",
+            data:{
+                ...data
+            }
+        })
+    }
+    // 汇金币买卖历史信息获取
+    HJBBuy_Sellhistory(data){
+        return xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/hjb/buy_sellhistory",
+            data:{
+                ...data
+            }
+        })
+    }
+    // 汇金币信息获取
+    HJBmessage(data){
+        return xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/hjb/hjbmessage",
+            data:{
+                ...data
+            }  
+        })
+    }
 }
-
-// 汇金币通过服务端管理代币函数
+    
+   
 export default new HjbService();

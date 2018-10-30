@@ -100,7 +100,7 @@ export default class Head extends  Component{
                         <Itemlist imgarry={this.state.imgarry}/>
                     </div>
                     <div className='right'>
-                        <SearchInput/>
+                        {/* <SearchInput/> */}
                     </div>
                 </div>
                 </div>

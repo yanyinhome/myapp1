@@ -1,6 +1,7 @@
 import React,{Component} from "react";
 import EthService from "../../../services/EthServices";
-import {Table} from "element-react";
+import HjbService from "../../../services/HjbService";
+import {Table,Tabs} from "element-react";
 export default class History extends Component{
     constructor(props){
         super(props);
@@ -30,31 +31,105 @@ export default class History extends Component{
                   width:360
                 }
               ],
-            data:[],
+            HjbBuy_Sellcolumns: [
+                {
+                  label: "时间",
+                  prop: "data",
+                  width: 195,
+                  align:"center"
+                },
+                {
+                  label: "数量",
+                  prop: "number",
+                  width: 100,
+                  align:"center",
+                 
+                },
+                {
+                  label: "哈希地址",
+                  prop: "hash",
+                  align:"center",
+                  width:600
+                },
+                {
+                  label: "买入/卖出",
+                  prop: "type",
+                  align:"center",
+                 
+                }
+              ],
+            ETHhistory:[],
+            HJBhistorydata:[],
+            HJBBuy_Sellhistory:[],            
         }
     }
     componentDidMount(){
+        // 以太币转账记录
+        
         EthService.ETHhistory().then(data=>{
+            console.log(data.data)
             let timearray=[];
             data.data.map(item=>{return timearray.push(Object.assign(item,{data:item.data.split("G")[0]}))})
-            this.setState({data:timearray})
+            this.setState({ETHhistory:timearray})
+        })
+        // 汇金币转账记录
+        HjbService.HJBhistory().then(data=>{
+            console.log('eth',data,data);
+            let timearray=[];
+            data.data.map(item=>{return timearray.push(Object.assign(item,{data:item.data.split("G")[0]}))})
+            this.setState({HJBhistorydata:timearray})
+        })
+        // 汇金币买卖记录
+        HjbService.HJBBuy_Sellhistory().then(data=>{
+            console.log("hjb",data.data);
+            let timearray=[];
+            data.data.map(item=>{return timearray.push(Object.assign(item,{data:item.time.split("G")[0]},{type:item.type===1?"买入":"卖出"}))})
+            this.setState({HJBBuy_Sellhistory:timearray})
         })
     }
     render(){
         // let itemlist=this.state.history.map(item=>(<p key={item.hash}><span>{item.toaddress}</span><span>{item.number}</span><span>{item.hash}</span><span>{item.data.split("(")[0]}</span></p>))
         return(
             <div>
-                {/* {itemlist} */}
-                <Table
-                    style={{width: '100%'}}
-                    columns={this.state.columns}
-                    data={this.state.data}
-                    border={true}
-                    height={600}
-                    highlightCurrentRow={true}
-                    onCurrentChange={item=>{console.log(item)}}
-                    stripe={true}
-                />
+                 <Tabs activeName="1" onTabClick={ (tab) => console.log(tab.props.name) }>
+                    <Tabs.Pane label="以太币转账" name="1">
+                            <Table
+                            style={{width: '100%'}}
+                            columns={this.state.columns}
+                            data={this.state.ETHhistory}
+                            border={true}
+                            height={600}
+                            highlightCurrentRow={true}
+                            onCurrentChange={item=>{console.log(item)}}
+                            stripe={true}
+                        />
+                    </Tabs.Pane>
+                    <Tabs.Pane label="汇金币转账" name="2">
+                        <Table
+                            style={{width: '100%'}}
+                            columns={this.state.columns}
+                            data={this.state.HJBhistorydata}
+                            border={true}
+                            height={600}
+                            highlightCurrentRow={true}
+                            onCurrentChange={item=>{console.log(item)}}
+                            stripe={true}
+                        />
+                    </Tabs.Pane>
+                    <Tabs.Pane label="汇金币买卖" name="3">
+                        <Table
+                            style={{width: '100%'}}
+                            columns={this.state.HjbBuy_Sellcolumns}
+                            data={this.state.HJBBuy_Sellhistory}
+                            border={true}
+                            height={600}
+                            highlightCurrentRow={true}
+                            onCurrentChange={item=>{console.log(item)}}
+                            stripe={true}
+                        />
+                    </Tabs.Pane>
+                </Tabs>
+                
             </div>
         )
     }

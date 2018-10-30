@@ -33,7 +33,7 @@ export default class Balance extends Component{
             res=>{
                 if(res){
                     if(Object.keys(res.data).length!==0){
-                        console.log(res.data)
+                        // console.log(res.data)
                         self.setState({address:res.data.address,HJB:{number:res.data.hjb_number?res.data.hjb_number:0}})
                     } 
                 }

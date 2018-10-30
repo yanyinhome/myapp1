@@ -148,11 +148,12 @@ router.post("/hjbbuy",function(req,res,next){
                               hash:result,
                               number:value,
                               time:time,
-                              type:1
+                              type:1,
+                              address:user_address
                             }
                             // 插入数据库
                             console.log(buy_sell_history.insert_history)
-                            client.query(buy_sell_history.insert_history,[data.number,data.hash,data.time,data.type],function(err,result){
+                            client.query(buy_sell_history.insert_history,[data.number,data.hash,data.time,data.type,data.user_address],function(err,result){
                               if(err){console.log(err)}else{
                                   console.log(result);
                               }
@@ -210,10 +211,11 @@ router.post("/hjbsell",function(req,res,next){
                               hash:result,
                               number:value,
                               time:time,
-                              type:0
+                              type:0,
+                              address:user_address,
                             }
                             // 插入数据库
-                            client.query(buy_sell_history.insert_history,[data.number,data.hash,data.time,data.type],function(err,result){
+                            client.query(buy_sell_history.insert_history,[data.number,data.hash,data.time,data.type,data.user_address],function(err,result){
                               if(err){console.log(err)}else{
                                   console.log(result);
                               }
@@ -231,4 +233,54 @@ router.post("/hjbsell",function(req,res,next){
     })
   }
 })
+// 汇金币转账历史记录查询
+router.get('/history',function(req,res,next){
+  // 从session中获取用户信息
+  let data=req.session.user;
+  if(data){
+    // 如果存在，进行查询
+    client.query(tourial_historysql.search_hjball,[data.address],function(err,result){
+      if(err){console.log(err)}
+        else{
+          responseClient(res,200,1,"查询成功",result)
+        }
+    })
+  }
+})
+// 汇金币买卖历史信息获取
+router.get('/buy_sellhistory',function(req,res,next){
+  // 从seeion中获取用户信息
+  let data=req.session.user;
+  if(data){
+    // 如果存在，进行查询
+    client.query(buy_sell_history.search_all,[data.address],function(err,result){
+      if(err){
+        console.log(err)
+      }else{
+        responseClient(res,200,1,"查询成功",result)
+      }
+    })
+  }
+})
+// 汇金币信息获取
+router.get('/hjbmessage',function(req,res,next){
+  responseClient(res,200,1,"代币信息显示连接成功")
+})
+// 代币账户冻结/解冻
+router.post('/hjb_frozen',function(req,res,next){
+  responseClient(res,200,1,"代币冻结/解冻连接成功")
+})
+// 代币设置卖出价格
+router.post('/setprice',function(req,res,next){
+  responseClient(res,200,1,"代币设置买入/卖出价格连接成功")
+})
+// 代币增发
+router.post('/add',function(req,res,next){
+  responseClient(res,200,1,"代币增发连接成功")
+})
+// 代币设置GAS
+router.post('/setgas',function(req,res,next){
+  responseClient(res,200,1,"代币设置GAS连接成功")
+})
+
 module.exports = router;
