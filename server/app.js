@@ -6,7 +6,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var hjb=require('./routes/hjb');
-var eth=require('./routes/eth')
+var eth=require('./routes/eth');
+var test=require('./routes/test');
 var bodyParser = require("body-parser");
 var expresssession=require("express-session")
 var app = express();
@@ -46,9 +47,11 @@ app.use('/', indexRouter);
 // 处理用户管理
 app.use('/users', usersRouter);
 //处理代币
-app.use('/hjb',hjb)
+app.use('/hjb',hjb);
 // 处理以太币
-app.use('/eth',eth)
+app.use('/eth',eth);
+// 测试
+app.use('/test',test);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

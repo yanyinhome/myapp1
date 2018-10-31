@@ -116,12 +116,13 @@ router.post('/admin/login', function(req, res, next) {
           responseClient(res, 200, 2, '用户名或密码错误')
         }else{
           if (result[0].username === params.username && result[0].password === params.password) {
+            console.log(result[0])
             // res.end(JSON.stringify({status:'100',msg:'登录成功'}));
             let admin = {
                 _id:result[0].id,
                 username:result[0].username,
                 address:result[0].address,
-                password:result[0].password,
+                password:result[0].pass,
             }
             // 添加seesion和cookie验证
             req.session.admin=admin;
