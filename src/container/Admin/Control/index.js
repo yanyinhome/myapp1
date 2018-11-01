@@ -442,14 +442,17 @@ export default class Control extends Component{
     constructor(props) {
         super(props);      
         this.state={
-         
+            username:"admin",
+            loadout_display:"none"
             // 
       }}
       componentDidMount(){
         // 验证，做一个判断，如果已经登录则跳转
         // console.log(this.props)
       }
-      
+      loadout=()=>{
+        this.setState({loadout_display:"block"})
+      }
       handleReset(e) {
         e.preventDefault();
       
@@ -466,6 +469,10 @@ export default class Control extends Component{
         return (
           <div>
               <h1 style={{background:"#346aa9",color:"#fff",textAlign:"center",height:"100px",lineHeight:"100px",fontSize:"26px",fontWeight:300,marginBottom:"10pX"}}>欢迎来到 HJB 管理系统</h1>
+              {/* <div style={{position:"relative"}}>
+              <a style={{color:"#999",fontSize:"14px",display:"inline-block",float:"right",marginRight:"10rem"}} onClick={this.loadout}>{this.state.username}</a>
+                <div>注销</div>
+              </div> */}
               <Layout.Row >
                   <Layout.Col span="14" offset="5">
                   <Tabs activeName="1" onTabClick={ (tab) => console.log(tab.props.name) }>

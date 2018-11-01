@@ -83,7 +83,24 @@ router.post('/register',function(req,res,next){
 })
 // 昵称修改处理
 router.post("/nameChange",function(req,res,next){
-
+  let newnickname=req.body.nickname;
+  let username=req.session.user.username;
+  console.log(newnickname,username)
+  if(req.session.user.password===req.body.pass){
+    client.query(MessageSQL.updateUserName,[newnickname,username],function(err,result){
+      if(err){
+        console.log(err);
+        responseClient(res,200,1,"修改失败，数据存入错误")
+      }else{
+       if(result.length===0){
+         responseClient(res,200,1,"修改失败，数据库查询错误")
+       }else{
+        req.session.user.username=newnickname;
+        responseClient(res,200,1,"修改成功",{result:true})
+       }
+      }
+    })
+  }
 })
 // 用户信息获取处理
 router.get('/userInfo', function(req, res, next) {
