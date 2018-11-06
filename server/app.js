@@ -10,6 +10,7 @@ var eth=require('./routes/eth');
 var test=require('./routes/test');
 var bodyParser = require("body-parser");
 var expresssession=require("express-session")
+// var web=require("./web3")
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -56,7 +57,6 @@ app.use('/test',test);
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development

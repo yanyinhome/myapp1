@@ -91,7 +91,7 @@ export default class Login extends Component{
                     <div>
                     <Form ref="form" model={this.state.form} rules={this.state.rules} labelWidth="100" className="demo-ruleForm">
                         <Form.Item prop="username" >
-                        <Input value={this.state.form.username} onChange={this.onChange.bind(this, 'username')} autoComplete="off" placeholder="请输入手机或者邮箱" style={{width:"15rem"}}/>
+                        <Input value={this.state.form.username} onChange={this.onChange.bind(this, 'username')} autoComplete="off" placeholder="请输入用户名" style={{width:"15rem"}}/>
                         </Form.Item>
                         <Form.Item prop="pass">
                         <Input type="password" value={this.state.form.pass} onChange={this.onChange.bind(this, 'pass')} placeholder="请输入密码" style={{width:"15rem"}}></Input>

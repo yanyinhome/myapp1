@@ -1,454 +1,50 @@
 import React,{Component} from "react";
-import {Button,Layout,Form,Input,Tabs,Table,Select,Notification}  from "element-react";
+import {Button,Layout,Menu,Popover}  from "element-react";
 import "element-theme-default";
 import HjbService from "../../../services/HjbService";
-// 代币信息列表
-class TokenShow extends Component{ 
-  constructor(props){
-    super(props)
-    this.state={
-       // 代币信息表单表头数组
-       columns: [
-        {
-          label:'管理者账户',
-          prop:"adminAccount",
-          align:'center',
-          width:360
-        },
-        {
-          label: "代币名称",
-          prop: "name",
-          align:'center',
-          // width:100,
-        },
-        {
-            label:'代币标志',
-            prop:'symbol',
-            align:'center',
-            // width:100,
-        },
-        {
-          label: "发行数量",
-          prop: "totalSupply",
-          align:'center',
-          width:210,
-        },
-        {
-          label: "买入价格",
-          prop: "buyPrice",
-          align:'center',
-          // width:100,
-        },
-        {
-          label: "卖出价格",
-          prop: "sellPrice",
-          align:'center',
-          // width:100,
-        },
-      ],
-      // 代币信息展示state
-      TokenMessage: [{
-        adminAccount:"无",
-        name: '汇金币',
-        totalSupply: '100',
-        buyPrice: '0',
-        sellPrice:"0",
-        symbol:'0',
-        decimals:'0',
-      },],
-    }
-  } 
-  componentDidMount(){
-    // console.log(this.props)
-    const self = this;
-    HjbService.HJBmessage().then(
-      res=>{
-        if(res.code===0){
-          Notification.info({
-            title:"提示",
-            message:res.message,
-            onClose:function(){
-              self.props.history.push('/admin')
-            },
-            duration:2000,
-          }) 
-        }else{
-          // console.log(res);
-          self.setState({TokenMessage:[res.data]})
-        }
-      }
-    ).catch(err=>{console.log(err);})
-  }    
-  render() {
-    return (
-      <Table
-        style={{width: '100%'}}
-        columns={this.state.columns}
-        data={this.state.TokenMessage}
-        stripe={true}
-        border={true}
-        history={this.props.history}
-      />
-    )
-  }  
-}
+import {Route } from 'react-router-dom';
+import logo from '../../../../static/img/logo.png';
+import Loadable from 'react-loadable';
+const Loading = () => <div>Loading...</div>;
+const TokenShow=Loadable({
+  loader:()=>import("./component/TokenShow"),
+  loading:Loading}); 
+  // 设置买卖价格组件
+const SetPrice=Loadable({
+  loader:()=>import("./component/SetPrice"),
+  loading:Loading}); 
+  // 设置阈值信息组件
+const SetGAS=Loadable({
+  loader:()=>import("./component/SetGas"),
+  loading:Loading}); 
+  // 代币增发组件
+const MintToken=Loadable({
+  loader:()=>import("./component/MintToken"),
+  loading:Loading}); 
 // 代币冻结/解冻组件
-class FozenAccount extends Component{
-  constructor(props) {
-      super(props);
-      this.state = {
-        form: {
-          region: '0',
-         address:""
-        },
-        rules:{
-          address:[{required:true,message:"地址不能为空",trigger:'blur'}]
-        }
-      };
-    }
-    handleReset(e) {
-      e.preventDefault(); 
-      this.setState({form:{region: '',address: ''}});   
-      this.refs.form.resetFields()
-    }
-    onSubmit(e) {
-      e.preventDefault();
-      // console.log(this.state.form)
-      HjbService.HjbFroze(this.state.form).then(res=>{
-        console.log(res)
-        let code=res.data.state;
-        switch (code){
-          case 0:
-          if(res.data.result===0){
-            Notification.info({
-              title:"提示",
-              message:res.message,
-              duration:2000,
-            })
-          }else{
-            Notification.success({
-              title:"提示",
-              message:res.message,
-              duration:2000,
-            }) 
-          }
-          return;
-          case 1:
-          if(res.data.result===0){
-            Notification.info({
-              title:"提示",
-              message:res.message,
-              duration:2000,
-            })
-          }else{
-            Notification.success({
-              title:"提示",
-              message:res.message,
-              duration:2000,
-            })
-          }
-          return;
-          case 2:
-          if(res.data.result===0){
-            Notification.info({
-              title:"提示",
-              message:res.message,
-              duration:2000,
-            })
-          }else{
-            Notification.success({
-              title:res.message,
-              message:`账户汇金币数量：${res.data.result}`,
-              duration:2000,
-            }) 
-          }
-          return;
-          default:
-          console.log(res)
-          return;
-        }
-      }).catch(err=>{console.log(err)})
-    }
-    
-    onChange(key, value) {
-      this.setState({form:Object.assign({},this.state.form,{[key]:value})})
-      
-    }
-    
-  render(){
-      return(
-  <Form ref="form" model={this.state.form} rules={this.state.rules} labelWidth="120" onSubmit={this.onSubmit.bind(this)}>
-    <Form.Item label="请选择操作选项">
-      <Select value={this.state.form.region} placeholder="请选择操作选项" onChange={this.onChange.bind(this, 'region')}>
-        <Select.Option label="冻结" value="0" selected></Select.Option>
-        <Select.Option label="解冻" value="1"></Select.Option>
-        <Select.Option label="查询" value="2"></Select.Option>
-      </Select>
-    </Form.Item>
-    <Form.Item label="输入地址" prop="address">
-      <Input style={{width:300}} value={this.state.form.address} onChange={this.onChange.bind(this, 'address')}></Input>
-    </Form.Item>
-    <Form.Item>
-      <Button type="primary" nativeType="submit">确定</Button>
-      <Button onClick={this.handleReset.bind(this)}>取消</Button>
-    </Form.Item>
-  </Form>
-  )
-  }
-}
-// 设置阈值信息组件
-class SetGAS extends Component{
-  constructor(props) {
-      super(props);
-    
-      this.state = {
-        form: {
-          desc: ''
-        },
-        rules:{
-          desc:[
-            {
-              required:"ture",
-              message:"阈值不能为空",
-              trigger:"blur"
-            },{validator:(rule,value, callback) => {
-              let numberonly=/^[0-9]+$/;
-              if(!numberonly.test(value)){
-                callback(new Error('只能是数字'));
-              }else{
-                callback()
-              }
-            } }
-          ]
-        }
-      };
-    }
-    handleReset(e){
-      e.preventDefault();
-      this.setState({form:{address:""}});
-      this.refs.form.resetFields();
-    }     
-    onSubmit(e) {
-      e.preventDefault();
-      HjbService.HjbSetGas(this.state.form).then(res=>{
-        if(res.data.number){
-          Notification.info({
-            title:res.data.message,
-            message:`阈值被设置为${res.data.number}`,
-            duration:2000,
-          })
-        }
-      }).catch(err=>{console.log(err)})
-    }
-    onChange(key, value) {
-      this.setState({form:Object.assign({},this.state.form,{[key]:value})});
-      this.forceUpdate();
-    }
-  render(){
-      return(
-  <Form ref="form" rules={this.state.rules} model={this.state.form} labelWidth="150" onSubmit={this.onSubmit.bind(this)}>
-    <Form.Item label="请输入新的GAS阈值" prop="desc">
-      <Input style={{width:300}} value={this.state.form.desc} onChange={this.onChange.bind(this, 'desc')}></Input>
-    </Form.Item>
-    <Form.Item>
-      <Button type="primary" nativeType="submit">确定</Button>
-      <Button onClick={this.handleReset.bind(this)}>取消</Button>
-    </Form.Item>
-  </Form>    
-      )
-  }
-}
-// 代币增发组件
-class MintToken extends Component{
-  constructor(props) {
-      super(props);
-    
-      this.state = {
-        form: {
-          number: '',
-          address: '',
-        },
-        rules:{
-          number:[{
-            required:true,
-            message:"数量不能为空",
-            trigger:"blur",
-          },{
-            validator:(rule,value,callback)=>{
-              let numberonly=/^[0-9]+$/;
-              if(!numberonly.test(value)){
-                callback(new Error('只能是数字'));
-              }else{
-                callback()
-              }
-            }
-          }],
-          address:[
-            {
-            required:true,
-            message:"地址不能为空",
-            trigger:"blur",
-            },
-           ]
-        }
-      };
-    }
-    handleReset(e) {
-      e.preventDefault(); 
-      this.setState({form:{number:"",address:""}});    
-      this.refs.form.resetFields()
-    }    
-    onSubmit(e) {
-      e.preventDefault();
-      this.refs.form.validate(
-        (valid)=>{
-            if(valid){
-              HjbService.HjbZengfa(this.state.form).then(res=>{
-                if(res.data.number){
-                  Notification.info({
-                    title:res.data.message,
-                    message:`增发${res.data.number}以太币`,
-                    duration:2000,
-                  })
-                }
-              }).catch(err=>{console.log(err)})   
-            }
-        }  
-      )
-    } 
-    onChange(key, value) {
-      this.setState({form:Object.assign({},this.state.form,{[key]:value})});
-      this.forceUpdate();
-    }
-  render(){
-      return(
-          <Form ref="form" rules={this.state.rules} model={this.state.form} labelWidth="80" onSubmit={this.onSubmit.bind(this)}>
-          <Form.Item label="增发数量" prop="number">
-            <Input style={{width:300}} value={this.state.form.number} onChange={this.onChange.bind(this, 'number')}></Input>
-          </Form.Item>
-          <Form.Item label="增发地址" prop="address">
-            <Input style={{width:300}} value={this.state.form.address} onChange={this.onChange.bind(this, 'address')}></Input>
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" nativeType="submit">确定</Button>
-            <Button onClick={this.handleReset.bind(this)}>取消</Button>
-          </Form.Item>
-        </Form>  
-      )
-  }
-}
-// 设置买卖价格组件
-class SetPrice extends Component{
-  constructor(props) {
-      super(props);      
-      this.state = {
-        form: {
-          price: '',
-          region: '0',
-        },
-        rules:{
-          price:[{
-              required:true,message:'内容不能为空',trigger:'blur'
-          },{validator:(rule,value, callback) => {
-              let numberonly=/^[0-9]+$/;
-              if(!numberonly.test(value)){
-                callback(new Error('只能是数字'));
-              }else{
-                callback()
-              }
-            } }]
-        }
-      };
-    } 
-    handleReset(e) {
-      e.preventDefault(); 
-      this.setState({form:{price:"",region:""}});    
-      this.refs.form.resetFields()
-    }    
-    onSubmit(e) {
-      e.preventDefault();
-      this.refs.form.validate(
-        (valid)=>{
-          if(valid){
-            HjbService.HjbSetPrice(this.state.form).then(res=>{
-              let state=res.data.state;
-              switch (state){
-                case 0:
-                  if(res.data.result===0){
-                    Notification.info({
-                      title:"提示",
-                      message:res.message,
-                      duration:2000,
-                    }) 
-                  }else{
-                    Notification.success({
-                      title:"提示",
-                      message:res.message,
-                      duration:2000,
-                    })
-                  }
-                return;
-                case 1:
-                if(res.data.result===0){
-                  Notification.info({
-                    title:"提示",
-                    message:res.message,
-                    duration:2000,
-                  }) 
-                }else{
-                  Notification.success({
-                    title:"提示",
-                    message:res.message,
-                    duration:2000,
-                  })
-                }
-                return;
-                default:
-                return;
-              }
-            }).catch(err=>{console.log(err)})
-          }
-        }
-      )
-    }
-    
-    onChange(key, value) {
-      this.setState({form:Object.assign({},this.state.form,{[key]:value})})
-      this.forceUpdate();
-    }
-    
-  render(){
-      return(
-  <Form ref="form" rules={this.state.rules} model={this.state.form} labelWidth="150" onSubmit={this.onSubmit.bind(this)}>
-    <Form.Item label="设置买入/卖出价格">
-      <Select value={this.state.form.region} placeholder="请选择操作选项" onChange={this.onChange.bind(this, 'region')}>
-        <Select.Option label="设置买入价格" selected value="0"></Select.Option>
-        <Select.Option label="设置卖出价格" value="1"></Select.Option>
-      </Select>
-    </Form.Item>
-    <Form.Item label="输入价格" prop="price">
-      <Input style={{width:300}} value={this.state.form.price} onChange={this.onChange.bind(this, 'price')}></Input>
-    </Form.Item>
-    <Form.Item>
-      <Button type="primary" nativeType="submit">确定</Button>
-      <Button>取消</Button>
-    </Form.Item>
-  </Form>
-  )
-  }
-}
-// 代币管理TABS组件
+const FozenAccount=Loadable({
+  loader:()=>import("./component/FrozenAccount"),
+  loading:Loading}); 
+// 角色权限组件
+const Permission=Loadable({
+  loader:()=>import("./component/Permission"),
+  loading:Loading}); 
+// 后台用户展示组件
+const AdminAccounts=Loadable({
+  loader:()=>import("./component/AdminAccounts"),
+  loading:Loading}); 
+// 代币管理组件
 export default class Control extends Component{
     constructor(props) {
         super(props);      
         this.state={
             username:"admin",
-            loadout_display:"none"
-            // 
+            loadout_display:"none",
+            visible:null
       }}
       componentDidMount(){
         // 验证，做一个判断，如果已经登录则跳转
-        // console.log(this.props)
+        // console.log(this.props.match.url)
       }
       loadout=()=>{
         this.setState({loadout_display:"block"})
@@ -464,41 +60,89 @@ export default class Control extends Component{
           form: Object.assign({}, this.state.form, { [key]: value })
         });
       }
-      
+      onOpen=()=>{
+
+      }
+      onClose=()=>{
+
+      }
+      onSelect=(key,e)=>{
+        console.log(key)
+          switch (key) {            
+              case "1":
+              this.props.history.push(`${this.props.match.url}`)
+                  break;
+              case "2-1":
+              this.props.history.push(`${this.props.match.url}/token1`)
+                  break;
+              case "2-2":
+              this.props.history.push(`${this.props.match.url}/token2`)
+                  break;
+              case "2-3":
+              this.props.history.push(`${this.props.match.url}/token3`)
+                  break;
+              case "2-4":
+              this.props.history.push(`${this.props.match.url}/token4`)
+                  break;
+              case "3-1":
+              this.props.history.push(`${this.props.match.url}/seting1`)
+                  break;        
+              case "3-2":
+              this.props.history.push(`${this.props.match.url}/seting2`)
+                  break;        
+              default:
+              console.log(this)
+                  break;
+          }
+      }
+      onDismiss=()=>{
+        this.setState({
+          visible: false
+        });
+      }
       render() {
         return (
-          <div>
-              <h1 style={{background:"#346aa9",color:"#fff",textAlign:"center",height:"100px",lineHeight:"100px",fontSize:"26px",fontWeight:300,marginBottom:"10pX"}}>欢迎来到 HJB 管理系统</h1>
-              {/* <div style={{position:"relative"}}>
-              <a style={{color:"#999",fontSize:"14px",display:"inline-block",float:"right",marginRight:"10rem"}} onClick={this.loadout}>{this.state.username}</a>
-                <div>注销</div>
-              </div> */}
-              <Layout.Row >
-                  <Layout.Col span="14" offset="5">
-                  <Tabs activeName="1" onTabClick={ (tab) => console.log(tab.props.name) }>
-                      <Tabs.Pane label="代币信息" name="1">
-                        <TokenShow history={this.props.history} />
-                      </Tabs.Pane>
-                      <Tabs.Pane label="账户冻结/解冻" name="2">
-                        <FozenAccount/>
-                      </Tabs.Pane>
-                      <Tabs.Pane label="设置买入/卖出价格" name="3">
-                        <SetPrice/>
-                      </Tabs.Pane>
-                      <Tabs.Pane label="代币增发" name="4">
-                        <MintToken/>
-                      </Tabs.Pane>
-                      {/* <Tabs.Pane label="转移管理者权限" name="5">
-                      <AdminChange/>
-                      </Tabs.Pane> */}
-                      <Tabs.Pane label="设置GAS阈值信息" name="5">
-                        <SetGAS/>
-                      </Tabs.Pane>
-                  </Tabs>   
-                </Layout.Col>
+              <Layout.Row>
+                  <Layout.Col span="3" style={{backgroundColor:"#324157",boxShadow:"-4px 0 6px rgba(0,0,0,.15) inset",height:"100%",position:"fixed",zIndex:"999",minWidth:"220px"}}>
+                    <img src={logo} alt="logo" style={{width:"auto",height:"50px",display:"block",margin:"20px auto"}}></img>
+                    <h5 style={{padding:"8px 15px",margin:"10px",background: "rgba(255,255,255,.4)",borderRadius:"4px"}}>{this.state.username}&nbsp;&nbsp;管理员 
+                    <Popover placement="bottom" width="160" trigger="click" visible={this.state.visible}  content={(
+                      <div>
+                        <h3>警告</h3>
+                        <p>确定要退出吗</p>
+                        <div style={{textAlign: 'right', margin: 0}}>
+                          <Button size="mini" type="text" onClick={this.onDismiss.bind(this)}>取消</Button>
+                          <Button type="primary" size="mini" onClick={this.onDismiss.bind(this)}>确定</Button>
+                        </div>
+                      </div>
+                    )}>
+                    <span style={{display:"inline-block",float:"right",marginRight:"20px",cursor:"pointer"}} onClick={()=>{console.log("1")}}>退出</span>
+                    </Popover>
+                    </h5>
+                    <Menu  className="el-menu-vertical-demo" theme="dark" onOpen={this.onOpen.bind(this)} onClose={this.onClose.bind(this)} onSelect={this.onSelect}>
+                      <Menu.Item index="1"><i className="el-icon-menu"></i>控制面板</Menu.Item>
+                      <Menu.SubMenu index="2" title={<span><i className="el-icon-message"></i>代币管理</span>}>
+                          <Menu.Item index="2-1">账户冻结/解冻</Menu.Item>
+                          <Menu.Item index="2-2">设置买入/卖出价格</Menu.Item>
+                          <Menu.Item index="2-3">代币增发</Menu.Item>
+                          <Menu.Item index="2-4">设置阈值信息</Menu.Item>
+                      </Menu.SubMenu>
+                      <Menu.SubMenu index="3" title={<span><i className="el-icon-setting"></i>系统设置</span>}>
+                          <Menu.Item index="3-1">权限角色</Menu.Item>
+                          <Menu.Item index="3-2">后台用户</Menu.Item>
+                      </Menu.SubMenu>
+                    </Menu>
+                  </Layout.Col>
+                  <Layout.Col span="21" style={{position:"fixed",padding:"20px 25px 20px",background:"#ddd",height:"100%",marginLeft:"220px"}}>
+                    <Route path={`${this.props.match.url}`} exact component={TokenShow}></Route>
+                    <Route path={`${this.props.match.url}/token1`}  component={FozenAccount}></Route>
+                    <Route path={`${this.props.match.url}/token2`}  component={ SetPrice}></Route>
+                    <Route path={`${this.props.match.url}/token3`}  component={ MintToken}></Route>
+                    <Route path={`${this.props.match.url}/token4`}  component={ SetGAS}></Route>
+                    <Route path={`${this.props.match.url}/seting1`}  component={ Permission}></Route>
+                    <Route path={`${this.props.match.url}/seting2`}  component={ AdminAccounts}></Route>
+                  </Layout.Col>
               </Layout.Row>
-             
-          </div>
         )
       }
       
