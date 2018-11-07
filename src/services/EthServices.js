@@ -15,6 +15,16 @@ import Xhr from "../utils/xhr"
             }
         })
     }
+    // 节点信息获取
+    EthPeers(data){
+        return Xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/eth/peers",
+            data:{
+                ...data
+            }
+        })
+    }
     // 以太币转账
     EthSend(data){
         return Xhr({

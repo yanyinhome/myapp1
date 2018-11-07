@@ -48,5 +48,29 @@ class userServices {
             url:"http://192.168.124.2:3005/users/logout"
         })
     }
+    // 查询已冻结用户列表
+    get_frozen_accounts(data){
+        return xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/users/frozen_accounts"
+        })
+    }
+    // 查询冻结解冻操作的历史记录
+    get_frozen_history(data){
+        return xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/users/frozen_history"
+        })
+    }
+    // 用户查询
+    usersearch(data){
+        return xhr({
+            method:"post",
+            url:"http://192.168.124.2:3005/users/usersearch",
+            data:{
+                ...data
+            }
+        })
+    }
 }
 export default new userServices();

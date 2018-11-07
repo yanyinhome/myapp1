@@ -2,7 +2,8 @@ import React,{Component} from "react";
 import {Layout,Table,Notification}  from "element-react";
 import HjbService from "../../../../../services/HjbService";
 import "element-theme-default";
-import {Headtitle,ChildrenTitle,ChildrenDiv} from "../public"
+import {Headtitle,ChildrenTitle,ChildrenDiv} from "../public";
+import EthServices from "../../../../../services/EthServices"
 // 代币信息列表
 export default class TokenShow extends Component{ 
     constructor(props){
@@ -61,7 +62,7 @@ export default class TokenShow extends Component{
           accountnumber:50,
           frozenaccountnumber:1,
           lasteblock:10788,
-          Gas:8000000,
+          Gas:"8000000",
           currentproviter:"192.168.124.2:8486",
           peers:0
         }
@@ -81,11 +82,16 @@ export default class TokenShow extends Component{
               duration:2000,
             }) 
           }else{
-            // console.log(res);
+            EthServices.EthPeers().then(
+              res=>{
+                self.setState({peermessage:res.data})
+              }
+            ).catch(err=>{console.log(err)})
             self.setState({TokenMessage:[res.data]})
           }
         }
-      ).catch(err=>{console.log(err);})
+      ).catch(err=>{console.log(err);});
+
     }    
     render() {
       return (
@@ -106,7 +112,7 @@ export default class TokenShow extends Component{
             <ChildrenDiv>总账户数:{this.state.peermessage.accountnumber}</ChildrenDiv>
           </Layout.Col>
           <Layout.Col lg="8" md="12" sm="24">
-          <ChildrenDiv>冻结账户数:{this.state.peermessage.frozenaccountnumber}</ChildrenDiv>
+          <ChildrenDiv>冻结账户数:{this.state.peermessage.frozenaccountnumbe}</ChildrenDiv>
           </Layout.Col>
           <Layout.Col lg="8" md="12" sm="24">
           <ChildrenDiv>最新区块数:{this.state.peermessage.lasteblock}</ChildrenDiv>

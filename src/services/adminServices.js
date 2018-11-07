@@ -15,6 +15,13 @@ import Xhr from "../utils/xhr"
             }
         })
     }
+    // 状态验证
+    getadmininfo(data){
+        return Xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/users/admin/admininfo"
+        })
+    }
     // 注销登录
     logout(data){
         return Xhr({

@@ -3,6 +3,7 @@ var router = express.Router();
 var MessageSQL=require('../db/messagesql');
 var adminSQL=require('../db/adminSql');
 var DBconfig=require('../db/DBconfig');
+var frozenSql=require('../db/frozenSql');
 var responseClient=require("../util/util");
 var Web3=require("web3");
 var web3;
@@ -109,8 +110,44 @@ router.get('/userInfo', function(req, res, next) {
     responseClient(res, 200, 1, '登录成功',data)
   }else{
     responseClient(res,200,1,"未登录")
-  }
-  
+  } 
+});
+// 查询已冻结用户列表
+router.get('/frozen_accounts',function(req,res,next){
+  client.query(frozenSql.frozenAccount_number,function(err,result){
+    if(err){
+      console.log(err)
+    }else{
+      responseClient(res,200,1,"ok",{result})
+    }
+  })
+ 
+})
+// 查询冻结解冻操作的历史记录
+router.get('/frozen_history',function(req,res,next){
+  client.query(frozenSql.searchall,function(err,result){
+    if(err){
+      console.log(err)
+    }else{
+      responseClient(res,200,1,"ok",{result})
+    }
+  })
+ 
+})
+// 用户查询
+router.post('/usersearch', function(req, res, next) {
+  if(req.body){
+    const {username,address}=req.body;
+    client.query(frozenSql.search_user_state,[username,address],function(err,result){
+      if(err){console.log(err)}
+        else{
+          if(result.length===0){responseClient(res,200,0,"ok")}
+            else{
+              responseClient(res,200,1,"ok",result[0])
+            }
+        }
+    })
+  }  
 });
 
 // 注销登录
@@ -133,7 +170,6 @@ router.post('/admin/login', function(req, res, next) {
           responseClient(res, 200, 2, '用户名或密码错误')
         }else{
           if (result[0].username === params.username && result[0].password === params.password) {
-            console.log(result[0])
             // res.end(JSON.stringify({status:'100',msg:'登录成功'}));
             let admin = {
                 _id:result[0].id,
@@ -151,10 +187,19 @@ router.post('/admin/login', function(req, res, next) {
     })
   }
 });
+// 管理员页面登录验证
+router.get('/admin/admininfo',function(req,res,next){
+  let data=req.session.admin;
+  if(data){
+    responseClient(res, 200, 1, '已登录',data)
+  }else{
+    responseClient(res,200,0,"您未登录,请登录")
+  }
+})
 // 管理页面注销登录
 router.get('/admin/logout',function(req,res,next){
-  // delete req.session.user;//退出时删除保存的user
-  // res.clearCookie(req.sessionID);//退出系统时清空cookie
+  delete req.session.admin;//退出时删除保存的user
+  res.clearCookie(req.sessionID);//退出系统时清空cookie
   responseClient(res,200,1,"已注销")
 })
 

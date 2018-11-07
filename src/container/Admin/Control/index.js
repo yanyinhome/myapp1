@@ -1,7 +1,8 @@
 import React,{Component} from "react";
-import {Button,Layout,Menu,Popover}  from "element-react";
+import {Button,Layout,Menu,Popover,Notification}  from "element-react";
 import "element-theme-default";
 import HjbService from "../../../services/HjbService";
+import AdminService from "../../../services/adminServices";
 import {Route } from 'react-router-dom';
 import logo from '../../../../static/img/logo.png';
 import Loadable from 'react-loadable';
@@ -38,13 +39,28 @@ export default class Control extends Component{
     constructor(props) {
         super(props);      
         this.state={
-            username:"admin",
+            username:"未登录",
             loadout_display:"none",
             visible:null
       }}
       componentDidMount(){
-        // 验证，做一个判断，如果已经登录则跳转
-        // console.log(this.props.match.url)
+        AdminService.getadmininfo().then(res=>{
+          const {code,message,data}=res;
+          if(code===0){
+            Notification.info({
+              title:"提示",
+              message:message,
+              duration: 1000,
+              onClose:()=>{
+                this.props.history.push('/admin')
+              }
+            });
+          }else{
+            this.setState({username:data.username})
+          }
+        }).catch(err=>{
+          console.log(err)
+        })
       }
       loadout=()=>{
         this.setState({loadout_display:"block"})
@@ -100,6 +116,18 @@ export default class Control extends Component{
           visible: false
         });
       }
+      onOut=()=>{
+        this.setState({
+          visible: false
+        });
+        AdminService.logout().then(
+          res=>{
+            if(res.code===1){
+                this.props.history.push("/admin");
+            }
+          }
+        ).catch(err=>{console.log(err)})
+      }
       render() {
         return (
               <Layout.Row>
@@ -112,7 +140,7 @@ export default class Control extends Component{
                         <p>确定要退出吗</p>
                         <div style={{textAlign: 'right', margin: 0}}>
                           <Button size="mini" type="text" onClick={this.onDismiss.bind(this)}>取消</Button>
-                          <Button type="primary" size="mini" onClick={this.onDismiss.bind(this)}>确定</Button>
+                          <Button type="primary" size="mini" onClick={this.onOut.bind(this)}>确定</Button>
                         </div>
                       </div>
                     )}>

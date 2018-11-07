@@ -229,7 +229,6 @@ router.post('/hjb_frozen',function(req,res,next){
     let pass=req.session.admin.password;
     let state=req.body.region;
     let address=req.body.address;
-    // console.log(adminaddress,req.session.admin)
     switch(state){
       case "0":
       web.web3.personal.unlockAccount(adminaddress,pass,3000,(err,result)=>{
@@ -241,7 +240,7 @@ router.post('/hjb_frozen',function(req,res,next){
               console.log(err)
               responseClient(res,200,1,"冻结失败",{state:0,result:0})
             }else{
-              responseClient(res,200,1,"冻结成功",{state:0,result:1})
+              responseClient(res,200,1,"冻结成功",{state:0,result:1,hash:result})
             }
           });               
         }
@@ -255,9 +254,9 @@ router.post('/hjb_frozen',function(req,res,next){
           web.hjb_contract.freezeAccount(address,true,{from:adminaddress},(err,result)=>{
             if(err){
               console.log(err);
-              responseClient(res,200,1,"解冻失败",{state:1,result:0})
+              responseClient(res,200,1,"解冻失败",{state:1,result:0,})
             }else{
-              responseClient(res,200,1,"解冻成功",{state:1,result:1})
+              responseClient(res,200,1,"解冻成功",{state:1,result:1,hash:result})
             }
           });    
         }

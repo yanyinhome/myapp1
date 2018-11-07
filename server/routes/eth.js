@@ -4,6 +4,7 @@ var Web3=require("web3");
 var DBconfig=require("../db/DBconfig");
 var tourial_historysql=require("../db/tourial_historysql");
 var responseClient=require("../util/util");
+var frozenSql = require('../db/frozenSql');
 var web3;
 // 引入数据库
 var mysql=require("mysql");
@@ -41,6 +42,23 @@ router.get('/ethaccount', function(req, res, next) {
     }
     
 });
+// 返回节点信息
+router.get ('/peers',function(req,res,next){
+    client.query(frozenSql.frozenAccount_number,function(err,result){
+        if(err){console.log(err)}
+            else{
+            const data={};
+            data.currentproviter=web3.currentProvider.host;
+            data.lasteblock=web3.eth.blockNumber;
+            data.peers=web3.net.peerCount;
+            data.Gas=web3.eth.gasPrice.toString(10  );
+            data.accountnumber=web3.eth.accounts.length;
+            data.frozenaccountnumbe=result.length;
+            responseClient(res,200,1,"ok",data)               
+            }
+    })
+    
+})
 // 返回以太币历史记录信息
 router.get("/history",function(req,res,next){
     let data=req.session.user;
