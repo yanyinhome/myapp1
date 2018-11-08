@@ -2,7 +2,7 @@ import React,{Component} from "react";
 import {Button,Form,Input,Select,Notification,Layout,Table}  from "element-react";
 import "element-theme-default";
 import HjbService from "../../../../../services/HjbService";
-import userServices from "../../../../../services/userServices"
+import userServices from "../../../../../services/userServices";
 import {Headtitle, ResultShow,Changeshow,ChildrenTitle,HistoryList} from "../public"
 // 代币冻结/解冻组件
 export default class FozenAccount extends Component{
@@ -22,6 +22,7 @@ export default class FozenAccount extends Component{
               {
                 label: "冻结日期",
                 prop: "date",
+                width:240
               },
               {
                 label: "昵称",
@@ -46,8 +47,10 @@ export default class FozenAccount extends Component{
           // chang结果状态数据
           Changeshow:{
             children:"未查询到用户",
+            username:"",
             visible:"none",
-            state:""
+            state:"",
+            action:""
           },
         };
       }
@@ -76,7 +79,8 @@ export default class FozenAccount extends Component{
            return {
              date:item.time,
             username:item.username,
-            state:item.state,
+            action:item.state===1?"冻结":"解冻",
+            type:item.state===1?"danger":"gray",
             message:"成功"
            }
          })
@@ -93,8 +97,7 @@ export default class FozenAccount extends Component{
       onSubmit(e) {
         e.preventDefault();
         if(this.state.Changeshow.children.length!==0&&this.state.Changeshow.children.length!==6){
-          HjbService.HjbFroze({region:this.state.form.region,address:this.state.Changeshow.children}).then(res=>{
-            console.log(res)
+          HjbService.HjbFroze({region:this.state.form.region,address:this.state.Changeshow.children,username:this.state.Changeshow.username}).then(res=>{
             let code=res.data.state;
             switch (code){
               case 0:
@@ -163,7 +166,6 @@ export default class FozenAccount extends Component{
       // 输入昵称是查询函数
       onChange(key, value) {
         this.setState({form:Object.assign({},this.state.form,{[key]:value})});
-        console.log(value)
         if(value===""){
           this.setState({Changeshow:Object.assign({},this.state.Changeshow,{visible:"none"})})
         }else{
@@ -171,12 +173,7 @@ export default class FozenAccount extends Component{
           userServices.usersearch({username:value,address:value}).then(res=>{
            const {data}=res;
            if(res.code===1){
-             if(data.state===1){
-              this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:`${data.address}冻结中`,state:data.state})})
-             }else{
-              this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:`${data.address}未冻结`,state:data.state})})
-             }
-             console.log("Changeshow",this.state.Changeshow) 
+              this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:`${data.address}`,state:data.state,username:data.username,action:data.state===1?"冻结中":"未冻结"})})
            }else{
             this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:"未查询到用户"})})
            }
@@ -184,6 +181,7 @@ export default class FozenAccount extends Component{
          
         }        
       }
+      // 显示冻结解冻状态的函数
     render(){
         return(
     <div>
@@ -202,7 +200,7 @@ export default class FozenAccount extends Component{
         <Input style={{width:300}} value={this.state.form.address} onChange={this.onChange.bind(this, 'address')} placeholder="输入地址或者用户名"></Input>
       </Form.Item>
       <Form.Item>
-        <Changeshow onclick={this.resultSelct} visible={this.state.Changeshow.visible}>{this.state.Changeshow.children}</Changeshow>
+        <Changeshow onclick={this.resultSelct} visible={this.state.Changeshow.visible}>{this.state.Changeshow.children}{this.state.Changeshow.action}</Changeshow>
       </Form.Item>
       <Form.Item>
         <Button type="primary" nativeType="submit">确定</Button>
@@ -225,7 +223,7 @@ export default class FozenAccount extends Component{
            border={true}
           />
       </Layout.Col>
-      <Layout.Col lg="12" md="24" style={{padding:"10px"}}>
+      <Layout.Col lg="12" md="24" style={{padding:"10px 20px",}}>
         <ChildrenTitle>历史操作记录</ChildrenTitle>
         <HistoryList data={this.state.frozen_history}></HistoryList>
       </Layout.Col>

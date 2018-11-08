@@ -4,6 +4,9 @@ var DBconfig=require("../db/DBconfig");
 var responseClient=require("../util/util");
 var tourial_historysql=require("../db/tourial_historysql");
 var buy_sell_history=require("../db/buy_sellSql");
+var admin_setpriceSql=require("../db/admin_setpriceSql");
+var frozenSQL = require('../db/frozenSql');
+var admin_minttokenSQL =require('../db/admin_minttokenSql');
 // 引入实例化过后的web
 var web=require("../web3")
 // 引入数据库
@@ -229,17 +232,24 @@ router.post('/hjb_frozen',function(req,res,next){
     let pass=req.session.admin.password;
     let state=req.body.region;
     let address=req.body.address;
+    console.log(req.body)
     switch(state){
       case "0":
       web.web3.personal.unlockAccount(adminaddress,pass,3000,(err,result)=>{
         if(err){
           console.log(err)
         }else{
-          web.hjb_contract.freezeAccount(address,false,{from:adminaddress},(err,result)=>{
+          web.hjb_contract.freezeAccount(address,true,{from:adminaddress},(err,result)=>{
             if(err){
               console.log(err)
               responseClient(res,200,1,"冻结失败",{state:0,result:0})
             }else{
+              client.query(frozenSQL.insert_history,[req.body.username,req.body.address,1],function(err,result){
+                if(err){console.log(err)}
+                  else{
+                    console.log(result)
+                  }
+              })     
               responseClient(res,200,1,"冻结成功",{state:0,result:1,hash:result})
             }
           });               
@@ -251,11 +261,17 @@ router.post('/hjb_frozen',function(req,res,next){
         if(err){
           console.log(err)
         }else{
-          web.hjb_contract.freezeAccount(address,true,{from:adminaddress},(err,result)=>{
+          web.hjb_contract.freezeAccount(address,false,{from:adminaddress},(err,result)=>{
             if(err){
               console.log(err);
               responseClient(res,200,1,"解冻失败",{state:1,result:0,})
             }else{
+              client.query(frozenSQL.insert_history,[req.body.username,req.body.address,0],function(err,result){
+                if(err){console.log(err)}
+                  else{
+                    console.log(result)
+                  }
+              })     
               responseClient(res,200,1,"解冻成功",{state:1,result:1,hash:result})
             }
           });    
@@ -283,17 +299,16 @@ router.post('/hjb_frozen',function(req,res,next){
   }
  
 })
-// 代币设置卖出价格
+// 代币设置买入卖出价格
 router.post('/setprice',function(req,res,next){
   if(req.session.admin){
-    console.log(req.body)
     let adminaddress=req.session.admin.address;
     let pass=req.session.admin.password;
     let state=req.body.region;
     let price=parseInt(req.body.price,10);
     let buyPrice=req.session.admin.data.buyPrice;
     let sellPrice=req.session.admin.data.sellPrice;
-    if(state===0){
+    if(state==="0"){
       web.web3.personal.unlockAccount(adminaddress,pass,3000,(err,result)=>{
         if(err){
           console.log(err)
@@ -303,6 +318,14 @@ router.post('/setprice',function(req,res,next){
               console.log(err)
               responseClient(res,200,1,"设置买入价格失败",{state:0,result:0})
             }else{
+              const params=req.session.admin;
+              client.query(admin_setpriceSql.insert_history,[params.username,1,price],function(err,result){
+                if(err){
+                  console.log(err);
+                }else{
+                  console.log(result);
+                }
+              })
               responseClient(res,200,1,"设置买入价格成功",{state:0,result:1})
             }
           });               
@@ -318,6 +341,14 @@ router.post('/setprice',function(req,res,next){
               console.log(err)
               responseClient(res,200,1,"设置卖出价格失败",{state:1,result:0})
             }else{
+              const params=req.session.admin;
+              client.query(admin_setpriceSql.insert_history,[params.username,2,price],function(err,result){
+                if(err){
+                  console.log(err);
+                }else{
+                  console.log(result);
+                }
+              })
               responseClient(res,200,1,"设置卖出价格成功",{state:1,result:1})
             }
           });               
@@ -327,13 +358,27 @@ router.post('/setprice',function(req,res,next){
   }
  }
 )
+// 代币设置历史记录查询
+router.get('/setprice_history',function(req,res,next){
+  let promisequery=new Promise(function(resolve,reject){
+    client.query(admin_setpriceSql.search_history,function(err,res){
+      if(err){reject(err)}
+        else{resolve(res)}
+    })
+  })
+  promisequery.then(result=>{
+    responseClient(res,200,1,"ok",{result})
+  })
+})
 // 代币增发
 router.post('/add',function(req,res,next){
   if(req.session.admin){
     let adminaddress=req.session.admin.address;
+    let admin_name=req.session.admin.username;
     let pass=req.session.admin.password;
     let number=parseInt(req.body.number,10);
     let address=req.body.address;
+    let username=req.body.username;
     web.web3.personal.unlockAccount(adminaddress,pass,3000,(err,result)=>{
       if(err){
         console.log(err)
@@ -343,13 +388,29 @@ router.post('/add',function(req,res,next){
             console.log(err)
             responseClient(res,200,1,"增发失败")
           }else{
-            console.log(result)
+            console.log(req.body)
+            client.query(admin_minttokenSQL.insert_history,[admin_name,number,username,address],function(err,result){
+              if(err){
+                console.log(err)
+              }else{
+                console.log(result)
+              }
+            })
             responseClient(res,200,1,"增发成功",{address:address,number:number,hash:result})
           }
         });               
       }
     }); 
   }
+})
+// 代币增发历史记录获取
+router.get('/add_history',function(req,res){
+  client.query(admin_minttokenSQL.get_history,function(err,result){
+    if(err){console.log(err)}
+      else{
+        responseClient(res,200,1,"ok",{result})
+      }
+  })
 })
 // 代币设置GAS
 router.post('/setgas',function(req,res,next){

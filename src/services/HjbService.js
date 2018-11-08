@@ -56,6 +56,16 @@ class HjbService{
             }
         })
     }
+    // 汇金币增发历史查询
+    HjbZengfa_history(data){
+        return xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/hjb/add_history",
+            data:{
+                ...data
+            }
+        })
+    }
     // Hjb设置买入/卖出价格
     HjbSetPrice(data){
         return xhr({
@@ -63,6 +73,16 @@ class HjbService{
             url:"http://192.168.124.2:3005/hjb/setprice",
             data:{
                 ...data
+            }
+        })
+    }
+    // 汇金币设置买卖价格历史记录查询
+    setprice_history(data){
+        return xhr({
+            method:"get",
+            url:"http://192.168.124.2:3005/hjb/setprice_history",
+            data:{
+                ...data 
             }
         })
     }
