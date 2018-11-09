@@ -1,9 +1,0 @@
-/* 标题 */
-.body_title{height: 75px;background: #272e51;margin-bottom: 0;}
-.body_title ul li{float: left;margin-left: 10px;margin-right: 10px;}
-.body_title ul li p{padding: 0 5px;text-align: center;margin-bottom:0;color: #c7cce6;}
-.body_title ul li .item_title{color:#c7cce6;line-height: 20px;height: 20px;margin-top: 20px;font-size: 14px;}
-.body_title ul li .item-content{color:#ebb67e;text-align: center;height: 20px;line-height: 20px;text-align: center;font-size: 14px;}
-/* 登录注册 */
-.register .el-input__inner{width: 35%;}
-.register .el-tabs .el-tabs__header{border-bottom:none}
