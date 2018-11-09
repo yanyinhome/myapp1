@@ -12,7 +12,7 @@ if (typeof web3 !== 'undefined') {
    web3 = new Web3(web3.currentProvider);
 } else {
   // set the provider you want from Web3.providers
-   web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.124.2:8486"));
+   web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.124.9:8486"));
 };
 // 引入数据库
 var mysql=require("mysql");
@@ -129,7 +129,9 @@ router.get('/frozen_history',function(req,res,next){
     if(err){
       console.log(err)
     }else{
-      responseClient(res,200,1,"ok",{result})
+      console.log(req.session.admin)
+      let admin_name=req.session.admin.username;
+      responseClient(res,200,1,"ok",{result:result,admin_name:admin_name})
     }
   })
  
@@ -180,6 +182,13 @@ router.post('/admin/login', function(req, res, next) {
             // 添加seesion和cookie验证
             req.session.admin=admin;
             res.cookie('user', admin, { expires: new Date(Date.now() + 900000), httpOnly: true });
+            client.query(adminSQL.update_time,[admin.username],function(err,result){
+              if(err){
+                console.log(err)
+              }else{
+                console.log(result)
+              }
+            })
             responseClient(res, 200, 1, '登录成功')
         }
         }
@@ -195,6 +204,17 @@ router.get('/admin/admininfo',function(req,res,next){
   }else{
     responseClient(res,200,0,"您未登录,请登录")
   }
+})
+// 查询管理员列表
+router.get('/admin/admin_list',function(req,res,next){
+  client.query(adminSQL.queryAll,function(err,result){
+    if(err){
+      responseClient(res,200,0,"数据库连接失败")
+    }else{
+      responseClient(res,200,1,"ok",{result})
+    }
+  })
+  
 })
 // 管理页面注销登录
 router.get('/admin/logout',function(req,res,next){

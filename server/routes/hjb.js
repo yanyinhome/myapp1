@@ -7,6 +7,7 @@ var buy_sell_history=require("../db/buy_sellSql");
 var admin_setpriceSql=require("../db/admin_setpriceSql");
 var frozenSQL = require('../db/frozenSql');
 var admin_minttokenSQL =require('../db/admin_minttokenSql');
+var admin_gasSQL =require('../db/admin_gasSQL');
 // 引入实例化过后的web
 var web=require("../web3")
 // 引入数据库
@@ -218,12 +219,12 @@ router.get('/hjbmessage',function(req,res,next){
       data.buyPrice=web.hjb_contract.buyPrice.call().toString();
       // 获取代币卖出价格
       data.sellPrice=web.hjb_contract.sellPrice.call().toString();
+      // 阈值暂时无法获取
       req.session.admin.data=data;
       responseClient(res,200,1,"查询成功",data)
   }else{
     responseClient(res,200,0,"您未登录，请先登录")
-  }
-  
+  }  
 })
 // 代币账户冻结/解冻
 router.post('/hjb_frozen',function(req,res,next){
@@ -416,6 +417,7 @@ router.get('/add_history',function(req,res){
 router.post('/setgas',function(req,res,next){
   console.log(req.body)
   if(req.session.admin){
+    let admin_name=req.session.admin.username;
     let adminaddress=req.session.admin.address;
     let pass=req.session.admin.password;
     let number=parseInt(req.body.desc,10);
@@ -428,12 +430,29 @@ router.post('/setgas',function(req,res,next){
             console.log(err)
             responseClient(res,200,1,"修改阈值失败")
           }else{
-            console.log(result)
+            client.query(admin_gasSQL.inserthistory,[admin_name,number],function(err,result){
+              if(err){
+                console.log(err)
+              }else{
+                console.log(result)
+              }
+            })
             responseClient(res,200,1,"修改阈值成功",{number:number,hash:result})
           }
         });               
       }
     }); 
   }
+})
+// 代币设置GAS历史记录查询
+router.get('/setgas_history',function(req,res,next){
+  client.query(admin_gasSQL.gethistory,function(err,result){
+    if(err){
+      responseClient(res,200,1,"err",{err})
+    }else{
+      responseClient(res,200,1,"ok",{result})
+    }
+  })
+  
 })
 module.exports = router;

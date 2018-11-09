@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var Web3=require("web3");
 var DBconfig=require("../db/DBconfig");
 var tourial_historysql=require("../db/tourial_historysql");
 var responseClient=require("../util/util");
 var frozenSql = require('../db/frozenSql');
-var web3;
+var web=require("../web3");
+var web3=web.web3;
 // 引入数据库
 var mysql=require("mysql");
 // 创建数据库客户端
@@ -17,13 +17,6 @@ client.connect((err,result)=>{
     console.log("eth连接数据库结果",result)
   }
 });
-//创建web3对象
-if (typeof web3 !== 'undefined') {
-   web3 = new Web3(web3.currentProvider);
-} else {
-  // set the provider you want from Web3.providers
-   web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.124.2:8486"));
-};
 // 返回ETH的账户信息
 router.get('/ethaccount', function(req, res, next) {
     let data=req.session.user;
@@ -48,7 +41,8 @@ router.get ('/peers',function(req,res,next){
         if(err){console.log(err)}
             else{
             const data={};
-            data.currentproviter=web3.currentProvider.host;
+            data.currentproviter="192.168";
+            // data.currentproviter=web3.currentProvider.host;
             data.lasteblock=web3.eth.blockNumber;
             data.peers=web3.net.peerCount;
             data.Gas=web3.eth.gasPrice.toString(10  );

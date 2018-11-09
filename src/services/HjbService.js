@@ -4,13 +4,13 @@ import xhr from "../utils/xhr";
 // 汇金币通过服务端获取信息函数
 class HjbService{
     constructor(){
-        this.url=url.development
+        this.url=url.development.url
     }
     // 账户信息获取
     HjbAccounts(data){
         return Xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/hjb/hjbaccount",
+            url:`${this.url}/hjb/hjbaccount`,
             data:{
                 ...data
             }
@@ -20,7 +20,7 @@ class HjbService{
     HjbSend(data){
         return Xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/hjb/hjbsend",
+            url:`${this.url}/hjb/hjbsend`,
             data:{
                 ...data
             }
@@ -30,7 +30,7 @@ class HjbService{
     HjbBuy(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/hjb/hjbbuy",
+            url:`${this.url}/hjb/hjbbuy`,
             data:{
                 ...data
             }
@@ -40,7 +40,7 @@ class HjbService{
     HjbSell(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/hjb/hjbsell",
+            url:`${this.url}/hjb/hjbsell`,
             data:{
                 ...data
             }
@@ -50,7 +50,7 @@ class HjbService{
     HjbZengfa(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/hjb/add",
+            url:`${this.url}/hjb/add`,
             data:{
                 ...data
             }
@@ -60,7 +60,7 @@ class HjbService{
     HjbZengfa_history(data){
         return xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/hjb/add_history",
+            url:`${this.url}/hjb/add_history`,
             data:{
                 ...data
             }
@@ -70,7 +70,7 @@ class HjbService{
     HjbSetPrice(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/hjb/setprice",
+            url:`${this.url}/hjb/setprice`,
             data:{
                 ...data
             }
@@ -80,7 +80,7 @@ class HjbService{
     setprice_history(data){
         return xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/hjb/setprice_history",
+            url:`${this.url}/hjb/setprice_history`,
             data:{
                 ...data 
             }
@@ -90,7 +90,7 @@ class HjbService{
     HjbFroze(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/hjb/hjb_frozen",
+            url:`${this.url}/hjb/hjb_frozen`,
             data:{
                 ...data
             }
@@ -100,7 +100,17 @@ class HjbService{
     HjbSetGas(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/hjb/setgas",
+            url:`${this.url}/hjb/setgas`,
+            data:{
+                ...data
+            }
+        })
+    }
+    // 汇金币设置gas历史记录查询
+    HjbSetGas_history(data){
+        return xhr({
+            method:"get",
+            url:`${this.url}/hjb/setgas_history`,
             data:{
                 ...data
             }
@@ -110,7 +120,7 @@ class HjbService{
     HJBhistory(data){
         return xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/hjb/history",
+            url:`${this.url}/hjb/history`,
             data:{
                 ...data
             }
@@ -120,7 +130,7 @@ class HjbService{
     HJBBuy_Sellhistory(data){
         return xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/hjb/buy_sellhistory",
+            url:`${this.url}/hjb/buy_sellhistory`,
             data:{
                 ...data
             }
@@ -130,7 +140,7 @@ class HjbService{
     HJBmessage(data){
         return xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/hjb/hjbmessage",
+            url:`${this.url}/hjb/hjbmessage`,
             data:{
                 ...data
             }  

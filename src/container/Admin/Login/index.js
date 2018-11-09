@@ -35,9 +35,6 @@ export default class Login extends Component{
           }
         };
       }
-      componentDidMount(){
-        // 验证，做一个判断，如果已经登录则跳转
-      }
       handleSubmit(e) {
         e.preventDefault();
        

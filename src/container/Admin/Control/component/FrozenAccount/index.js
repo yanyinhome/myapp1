@@ -73,12 +73,13 @@ export default class FozenAccount extends Component{
       })
         //查询冻结解冻操作的历史记录
        userServices.get_frozen_history().then(res=>{
-         console.log(res)
          const data=res.data.result;
          const list=data.map(item=>{
+           console.log(typeof item.time)
            return {
              date:item.time,
             username:item.username,
+            user:res.data.admin_name,
             action:item.state===1?"冻结":"解冻",
             type:item.state===1?"danger":"gray",
             message:"成功"
@@ -212,6 +213,7 @@ export default class FozenAccount extends Component{
      <ResultShow visible={this.state.resultshow.visible} children={this.state.resultshow.children} hash={this.state.resultshow.hash}></ResultShow>   
     </Layout.Col>
     </Layout.Row>
+    <hr/>
     <Layout.Row>
       <Layout.Col lg="12" md="24" style={{padding:"10px"}}>
           <ChildrenTitle>已冻结账户列表</ChildrenTitle>

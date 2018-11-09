@@ -2,13 +2,13 @@ import url from "../consts/Url"
 import xhr from "../utils/xhr";
 class userServices {
     constructor(){
-        this.url=url.development
+        this.url=url.development.url
     }
     //登录验证
     Login(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/users/login",
+            url:`${this.url}/users/login`,
             data:{
                 ...data
             }
@@ -18,7 +18,7 @@ class userServices {
     register(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/users/register",
+            url:`${this.url}/users/register`,
             data:{
                 ...data
             }
@@ -28,7 +28,7 @@ class userServices {
     nameChange(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/users/nameChange",
+            url:`${this.url}/users/nameChange`,
             data:{
                 ...data
             }
@@ -38,35 +38,35 @@ class userServices {
     userInfo(data){
         return xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/users/userInfo"
+            url:`${this.url}/users/userInfo`
         })
     }
     // 注销登录
     logout(data){
         return xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/users/logout"
+            url:`${this.url}/users/logout`
         })
     }
     // 查询已冻结用户列表
     get_frozen_accounts(data){
         return xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/users/frozen_accounts"
+            url:`${this.url}/users/frozen_accounts`
         })
     }
     // 查询冻结解冻操作的历史记录
     get_frozen_history(data){
         return xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/users/frozen_history"
+            url:`${this.url}/users/frozen_history`
         })
     }
     // 用户查询
     usersearch(data){
         return xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/users/usersearch",
+            url:`${this.url}/users/usersearch`,
             data:{
                 ...data
             }

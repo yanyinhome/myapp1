@@ -17,7 +17,7 @@ const Changeshow=({children="结果",visible="block",onclick})=><span onClick={o
 // 历史记录列表
 const HistoryList=({data=[{date:"",user:"",username:"",action:"",message:"success",type:"primary"}]})=>{
     const lilist=data.map((item,index)=>{
-        return <li key={index}>{item.date}<Tag type="gray" style={{margin:"0 0 0 10px"}}>{item.user}</Tag><Tag style={{marginLeft:"10px"}} type={item.type}> {item.action} </Tag><Tag style={{margin:"0 10px"}} type="primary">{item.username}</Tag>{item.message}</li>   
+        return <li style={{margin:"5px 0"}} key={index}>{item.date}<Tag type="gray" style={{margin:"0 0 0 10px"}}>{item.user}</Tag><Tag style={{marginLeft:"10px"}} type={item.type}> {item.action} </Tag><Tag style={{margin:"0 10px"}} type="primary">{item.username}</Tag>{item.message}</li>   
     })
     return <ul>{lilist}</ul>
 }

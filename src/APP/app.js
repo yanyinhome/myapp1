@@ -6,11 +6,11 @@ if (typeof web3 !== 'undefined') {
    web3 = new Web3(web3.currentProvider);
 } else {
   // set the provider you want from Web3.providers
-   web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.124.2:8486"));
+   web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.124.9:8486"));
 };
 // var web3 = new web3();
 // 连接到以太坊节点
-// web3.setProvider(new web3.providers.HttpProvider("http://192.168.124.2:8486"));
+// web3.setProvider(new web3.providers.HttpProvider("http://192.168.124.9:8486"));
 let version=web3.version;
 const app={
   web3:web3,

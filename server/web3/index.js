@@ -7,8 +7,9 @@ if (typeof web3 !== 'undefined') {
     web3 = new Web3(web3.currentProvider);
   } else {
    // set the provider you want from Web3.providers
-    web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.124.2:8486"));
+    web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.124.9:8486"));
   };
+  module.exports.web3=web3;
   // 引入数据库
   var mysql=require("mysql");
   // 创建数据库客户端
@@ -33,7 +34,7 @@ if (typeof web3 !== 'undefined') {
             let contract_address=result[0].contract_address;
             // 在合约地址上实例化合约
             hjb_contract=web3.eth.contract(hjbabi).at(contract_address);
-            module.exports.web3=web3;
+            
             module.exports.hjb_contract=hjb_contract;
             
         }

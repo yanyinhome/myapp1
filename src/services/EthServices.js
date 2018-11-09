@@ -3,13 +3,13 @@ import Xhr from "../utils/xhr"
 // 以太币通过服务端转账函数
  class EthService{
     constructor(){
-        this.url=url.development
+        this.url=url.development.url
     }
     // 账户信息获取
     EthAccounts(data){
         return Xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/eth/ethaccount",
+            url:`${this.url}/eth/ethaccount`,
             data:{
                 ...data
             }
@@ -19,7 +19,7 @@ import Xhr from "../utils/xhr"
     EthPeers(data){
         return Xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/eth/peers",
+            url:`${this.url}/eth/peers`,
             data:{
                 ...data
             }
@@ -29,7 +29,7 @@ import Xhr from "../utils/xhr"
     EthSend(data){
         return Xhr({
             method:"post",
-            url:"http://192.168.124.2:3005/eth/ethsend",
+            url:`${this.url}/eth/ethsend`,
             data:{
                 ...data
             }
@@ -39,7 +39,7 @@ import Xhr from "../utils/xhr"
     ETHhistory(data){
         return Xhr({
             method:"get",
-            url:"http://192.168.124.2:3005/eth/history",
+            url:`${this.url}/eth/history`,
             data:{
                 ...data
             }

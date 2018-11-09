@@ -149,6 +149,7 @@ export default class SetPrice extends Component{
     <Layout.Col lg="12" sm="24">
     </Layout.Col>
     </Layout.Row>
+    <hr/>
     <Layout.Row>
       <Layout.Col lg="12" md="24" style={{padding:"10px"}}>
           <ChildrenTitle>当前买卖价格</ChildrenTitle>
@@ -161,8 +162,8 @@ export default class SetPrice extends Component{
           />
           <p style={{lineHeight:"1.5em",fontSize:"14px",color:"#333",padding:"10px"}}>
           注释：<br/>
-          sellPrice出售时是1汇金币币换多少以太币（finney单位）<br/>
-          buyprice是购买时一汇金币换多少以太币(finney单位)<br/>
+          <b>sellPrice</b>出售时是1汇金币币换多少以太币（finney单位）<br/>
+          <b>buyprice</b>是购买时一汇金币换多少以太币(finney单位)<br/>
           如果要获利就要buyPrice>sellprice<br/>
           举例 10000finney的以太币<br/>
           买入汇金币 10000/1000（buyprice）=10汇金币<br/>

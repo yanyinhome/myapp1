@@ -136,23 +136,24 @@ export default class MintToken extends Component{
              <Layout.Row>
                <Layout.Col lg="12" sm="24">
                 <Headtitle>代币增发</Headtitle>
-                    <Form ref="form" rules={this.state.rules} model={this.state.form} labelWidth="80" onSubmit={this.onSubmit.bind(this)}>
-                  <Form.Item label="增发数量" prop="number">
-                    <Input style={{width:300}} value={this.state.form.number} onChange={this.onChange.bind(this, 'number')} placeholder="请输入要增发的数量"></Input>
-                  </Form.Item>
-                  <Form.Item label="增发地址" prop="address">
-                    <Input style={{width:300}} value={this.state.form.address} onChange={this.onChange.bind(this, 'address')} placeholder="请输入要增发的账户昵称或地址"></Input>
-                  </Form.Item>
-                  <Form.Item>
-                  <Changeshow onclick={this.resultSelct} visible={this.state.Changeshow.visible}>{this.state.Changeshow.children}{this.state.Changeshow.action}</Changeshow>
-                  </Form.Item>
-                  <Form.Item>
-                    <Button type="primary" nativeType="submit">确定</Button>
-                    <Button onClick={this.handleReset.bind(this)}>取消</Button>
-                  </Form.Item>
-                </Form>  
+                  <Form ref="form" rules={this.state.rules} model={this.state.form} labelWidth="80" onSubmit={this.onSubmit.bind(this)}>
+                    <Form.Item label="增发数量" prop="number">
+                      <Input style={{width:300}} value={this.state.form.number} onChange={this.onChange.bind(this, 'number')} placeholder="请输入要增发的数量"></Input>
+                    </Form.Item>
+                    <Form.Item label="增发地址" prop="address">
+                      <Input style={{width:300}} value={this.state.form.address} onChange={this.onChange.bind(this, 'address')} placeholder="请输入要增发的账户昵称或地址"></Input>
+                    </Form.Item>
+                    <Form.Item>
+                    <Changeshow onclick={this.resultSelct} visible={this.state.Changeshow.visible}>{this.state.Changeshow.children}{this.state.Changeshow.action}</Changeshow>
+                    </Form.Item>
+                    <Form.Item>
+                      <Button type="primary" nativeType="submit">确定</Button>
+                      <Button onClick={this.handleReset.bind(this)}>取消</Button>
+                    </Form.Item>
+                  </Form>  
                </Layout.Col>
              </Layout.Row>
+             <hr/>
              <Layout.Row>
                <Layout.Col lg="12" mg="24" style={{padding:"15px"}}>
                  <ChildrenTitle>现已发行代币数</ChildrenTitle>

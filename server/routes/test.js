@@ -2,6 +2,11 @@ var express = require('express');
 var router = express.Router();
 var responseClient=require("../util/util");
 var web= require("../web3");
+var web3=web.web3;
+router.get("/web3",function(req,res){
+    console.log(web3)
+    responseClient(res,200,1,"ok",{web:"web.web3"})
+})
 router.get("/test",function(req,res,next){
     let number=web.hjb_contract.totalSupply.call();
     let blocknumber=web.web3.eth.blockNumber;
