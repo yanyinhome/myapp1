@@ -3,7 +3,8 @@ import {Button,Form,Input,Select,Notification,Layout,Table}  from "element-react
 import "element-theme-default";
 import HjbService from "../../../../../services/HjbService";
 import userServices from "../../../../../services/userServices";
-import {Headtitle, ResultShow,Changeshow,ChildrenTitle,HistoryList} from "../public"
+import {Headtitle, ResultShow,Changeshow,ChildrenTitle,HistoryList} from "../public";
+import {Totime} from "../../../../../fun"
 // 代币冻结/解冻组件
 export default class FozenAccount extends Component{
     constructor(props) {
@@ -61,7 +62,7 @@ export default class FozenAccount extends Component{
           const {data}=res;
           const list=data.result.map(item=>{
             return {
-              date:item.time,
+              date:Totime(item.time),
               name:item.username,
               address:item.address
             }
@@ -75,9 +76,8 @@ export default class FozenAccount extends Component{
        userServices.get_frozen_history().then(res=>{
          const data=res.data.result;
          const list=data.map(item=>{
-           console.log(typeof item.time)
            return {
-             date:item.time,
+             date:Totime(item.time),
             username:item.username,
             user:res.data.admin_name,
             action:item.state===1?"冻结":"解冻",

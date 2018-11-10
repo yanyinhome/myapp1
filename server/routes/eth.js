@@ -41,8 +41,7 @@ router.get ('/peers',function(req,res,next){
         if(err){console.log(err)}
             else{
             const data={};
-            data.currentproviter="192.168";
-            // data.currentproviter=web3.currentProvider.host;
+            data.currentproviter=web3.currentProvider.host;
             data.lasteblock=web3.eth.blockNumber;
             data.peers=web3.net.peerCount;
             data.Gas=web3.eth.gasPrice.toString(10  );

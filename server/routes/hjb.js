@@ -233,7 +233,7 @@ router.post('/hjb_frozen',function(req,res,next){
     let pass=req.session.admin.password;
     let state=req.body.region;
     let address=req.body.address;
-    console.log(req.body)
+    let times=new Date().getTime()
     switch(state){
       case "0":
       web.web3.personal.unlockAccount(adminaddress,pass,3000,(err,result)=>{
@@ -245,7 +245,7 @@ router.post('/hjb_frozen',function(req,res,next){
               console.log(err)
               responseClient(res,200,1,"冻结失败",{state:0,result:0})
             }else{
-              client.query(frozenSQL.insert_history,[req.body.username,req.body.address,1],function(err,result){
+              client.query(frozenSQL.insert_history,[req.body.username,req.body.address,1,times],function(err,result){
                 if(err){console.log(err)}
                   else{
                     console.log(result)
@@ -267,7 +267,7 @@ router.post('/hjb_frozen',function(req,res,next){
               console.log(err);
               responseClient(res,200,1,"解冻失败",{state:1,result:0,})
             }else{
-              client.query(frozenSQL.insert_history,[req.body.username,req.body.address,0],function(err,result){
+              client.query(frozenSQL.insert_history,[req.body.username,req.body.address,0,times],function(err,result){
                 if(err){console.log(err)}
                   else{
                     console.log(result)
@@ -309,6 +309,7 @@ router.post('/setprice',function(req,res,next){
     let price=parseInt(req.body.price,10);
     let buyPrice=req.session.admin.data.buyPrice;
     let sellPrice=req.session.admin.data.sellPrice;
+    let times=new Date().getTime();
     if(state==="0"){
       web.web3.personal.unlockAccount(adminaddress,pass,3000,(err,result)=>{
         if(err){
@@ -320,7 +321,7 @@ router.post('/setprice',function(req,res,next){
               responseClient(res,200,1,"设置买入价格失败",{state:0,result:0})
             }else{
               const params=req.session.admin;
-              client.query(admin_setpriceSql.insert_history,[params.username,1,price],function(err,result){
+              client.query(admin_setpriceSql.insert_history,[params.username,1,price,times],function(err,result){
                 if(err){
                   console.log(err);
                 }else{
@@ -343,7 +344,7 @@ router.post('/setprice',function(req,res,next){
               responseClient(res,200,1,"设置卖出价格失败",{state:1,result:0})
             }else{
               const params=req.session.admin;
-              client.query(admin_setpriceSql.insert_history,[params.username,2,price],function(err,result){
+              client.query(admin_setpriceSql.insert_history,[params.username,2,price,times    ],function(err,result){
                 if(err){
                   console.log(err);
                 }else{
@@ -380,6 +381,7 @@ router.post('/add',function(req,res,next){
     let number=parseInt(req.body.number,10);
     let address=req.body.address;
     let username=req.body.username;
+    let times=new Date().getTime();
     web.web3.personal.unlockAccount(adminaddress,pass,3000,(err,result)=>{
       if(err){
         console.log(err)
@@ -390,7 +392,7 @@ router.post('/add',function(req,res,next){
             responseClient(res,200,1,"增发失败")
           }else{
             console.log(req.body)
-            client.query(admin_minttokenSQL.insert_history,[admin_name,number,username,address],function(err,result){
+            client.query(admin_minttokenSQL.insert_history,[admin_name,number,username,address,times],function(err,result){
               if(err){
                 console.log(err)
               }else{
@@ -421,6 +423,7 @@ router.post('/setgas',function(req,res,next){
     let adminaddress=req.session.admin.address;
     let pass=req.session.admin.password;
     let number=parseInt(req.body.desc,10);
+    let times=new Date().getTime();
     web.web3.personal.unlockAccount(adminaddress,pass,3000,(err,result)=>{
       if(err){
         console.log(err)
@@ -430,7 +433,7 @@ router.post('/setgas',function(req,res,next){
             console.log(err)
             responseClient(res,200,1,"修改阈值失败")
           }else{
-            client.query(admin_gasSQL.inserthistory,[admin_name,number],function(err,result){
+            client.query(admin_gasSQL.inserthistory,[admin_name,number,times],function(err,result){
               if(err){
                 console.log(err)
               }else{
@@ -444,7 +447,7 @@ router.post('/setgas',function(req,res,next){
     }); 
   }
 })
-// 代币设置GAS历史记录查询
+// 代币设置GAS历史记录查询0
 router.get('/setgas_history',function(req,res,next){
   client.query(admin_gasSQL.gethistory,function(err,result){
     if(err){

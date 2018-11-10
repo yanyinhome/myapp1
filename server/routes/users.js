@@ -182,7 +182,8 @@ router.post('/admin/login', function(req, res, next) {
             // 添加seesion和cookie验证
             req.session.admin=admin;
             res.cookie('user', admin, { expires: new Date(Date.now() + 900000), httpOnly: true });
-            client.query(adminSQL.update_time,[admin.username],function(err,result){
+            let times=new Date().getTime();
+            client.query(adminSQL.update_time,[times,admin.username],function(err,result){
               if(err){
                 console.log(err)
               }else{

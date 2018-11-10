@@ -3,7 +3,8 @@ import {Button,Form,Input,Notification,Layout}  from "element-react";
 import "element-theme-default";
 import HjbService from "../../../../../services/HjbService";
 import userServices from "../../../../../services/userServices"
-import {Headtitle,Changeshow,ChildrenTitle,HistoryList} from "../public"
+import {Headtitle,Changeshow,ChildrenTitle,HistoryList} from "../public";
+import { Totime } from "../../../../../fun";
 // 代币增发组件
 export default class MintToken extends Component{
     constructor(props) {
@@ -65,7 +66,7 @@ export default class MintToken extends Component{
               const data=res.data.result;
               const list=data.map(item=>{
                 return {
-                  date:item.time,
+                  date:Totime(item.time),
                   username:item.number,
                   user:item.admin_name,
                   action:"增发代币",

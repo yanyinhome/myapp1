@@ -3,7 +3,8 @@ import {Button,Input,Form,Notification,Layout}  from "element-react";
 import HjbService from "../../../../../services/HjbService";
 import EthServices from "../../../../../services/EthServices";
 import "element-theme-default";
-import {Headtitle,ChildrenTitle,HistoryList} from "../public"
+import {Headtitle,ChildrenTitle,HistoryList} from "../public";
+import { Totime } from "../../../../../fun";
 // 设置阈值信息组件
 export default class SetGAS extends Component{
     constructor(props) {
@@ -85,7 +86,7 @@ export default class SetGAS extends Component{
             console.log(data)
             const list=data.map(item=>{
               return {
-                date:item.time,
+                date:Totime(item.time),
                 username:item.gas,
                 user:item.adminname,
                 action:"设置阈值为",

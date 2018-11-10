@@ -4,6 +4,6 @@ var frozenSql = {
     searchall:"SELECT * FROM frozen",
     search_user_state:"SELECT	*FROM	frozen WHERE	id = (SELECT MAX(id) FROM	frozen WHERE username = ?	OR address = ?)",
     // 插入历史记录
-    insert_history:"INSERT INTO frozen(username,address,state) VALUES(?,?,?)"
+    insert_history:"INSERT INTO frozen(username,address,state,time) VALUES(?,?,?,?)"
   };
 module.exports = frozenSql;

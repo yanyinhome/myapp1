@@ -1,9 +1,9 @@
 import React,{Component} from "react";
-import {Layout,Table,Notification}  from "element-react";
+import {Layout,Table}  from "element-react";
 import HjbService from "../../../../../services/HjbService";
 import "element-theme-default";
 import {Headtitle,ChildrenTitle,ChildrenDiv} from "../public";
-import EthServices from "../../../../../services/EthServices"
+import EthServices from "../../../../../services/EthServices";
 // 代币信息列表
 export default class TokenShow extends Component{ 
     constructor(props){
@@ -73,14 +73,7 @@ export default class TokenShow extends Component{
       HjbService.HJBmessage().then(
         res=>{
           if(res.code===0){
-            Notification.info({
-              title:"提示",
-              message:res.message,
-              onClose:function(){
-                self.props.history.push('/admin')
-              },
-              duration:2000,
-            }) 
+            return
           }else{
             EthServices.EthPeers().then(
               res=>{

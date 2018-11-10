@@ -3,7 +3,7 @@ import {Headtitle} from "../public";
 import {Layout,Table} from "element-react";
 import adminServices from "../../../../../services/adminServices";
 import "element-theme-default";
-import { list } from "postcss";
+import {Totime} from "../../../../../fun";
 export default class AdminAccounts extends React.Component {
     constructor(props){
         super(props);
@@ -44,7 +44,7 @@ export default class AdminAccounts extends React.Component {
                       admin_name:item.username,
                       person:"管理员",
                       address:item.address,
-                      time:item.lasttime  
+                      time:Totime(item.lasttime),  
                     }
                 })
                 this.setState({data:list})

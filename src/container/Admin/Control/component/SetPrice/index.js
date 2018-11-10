@@ -3,6 +3,7 @@ import {Button,Form,Input,Notification,Select,Layout,Table}  from "element-react
 import "element-theme-default";
 import HjbService from "../../../../../services/HjbService";
 import {Headtitle,ChildrenTitle,HistoryList} from "../public"
+import { Totime } from "../../../../../fun";
 // 设置买卖价格组件
 export default class SetPrice extends Component{
   constructor(props) {
@@ -104,7 +105,7 @@ export default class SetPrice extends Component{
          const data=res.data.result;
          const list=data.map(item=>{
            return{
-             date:item.time,
+             date:Totime(item.time),
              username:item.price,
              user:item.adminname,
              action:item.state===1?"设置买入价格":"设置卖出价格",
