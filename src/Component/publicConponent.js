@@ -20,5 +20,8 @@ class Itemlist extends Component{
         )
     }
 }
-// 列表组件
+// 标题显示
+const Title=({children="标题"})=>{
+    return <h2>{children}</h2>
+}
 export {Itemlist};

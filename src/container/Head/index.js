@@ -75,9 +75,11 @@ export default class Head extends  Component{
         userService.userInfo().then(
             res=>{
                if(res){
-                if(Object.keys(res.data).length!==0){
+                if(res.code===1){
                     self.setState({loadstate:res.data.username,isloaded:true,address:res.data.address})
-                }     
+                }else{
+                    this.props.history.push("/login")
+                }    
                }         
             })
     }

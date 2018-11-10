@@ -1,9 +1,7 @@
 import React,{Component} from "react";
 import{Layout,Input,Button,Form,Notification} from "element-react";
-// import './Setting.css';
 import "element-theme-default";
 import userService from '../../services/userServices';
-import { config } from "rxjs";
 export default class Seting extends Component{
     constructor(props){
         super(props);

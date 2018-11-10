@@ -109,7 +109,7 @@ router.get('/userInfo', function(req, res, next) {
   if(data){
     responseClient(res, 200, 1, '登录成功',data)
   }else{
-    responseClient(res,200,1,"未登录")
+    responseClient(res,200,0,"未登录")
   } 
 });
 // 查询已冻结用户列表

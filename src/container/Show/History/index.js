@@ -2,6 +2,7 @@ import React,{Component} from "react";
 import EthService from "../../../services/EthServices";
 import HjbService from "../../../services/HjbService";
 import {Table,Tabs} from "element-react";
+import {Totime} from "../../../fun"
 export default class History extends Component{
     constructor(props){
         super(props);
@@ -64,26 +65,37 @@ export default class History extends Component{
         }
     }
     componentDidMount(){
-        // 以太币转账记录
-        
+        // 以太币转账记录    
         EthService.ETHhistory().then(data=>{
-            console.log(data.data)
-            let timearray=[];
-            data.data.map(item=>{return timearray.push(Object.assign(item,{data:item.data.split("G")[0]}))})
+            let timearray=data.data.map(item=>{return {
+                data:Totime(item.data),
+                number:item.number,
+                hash:item.hash,
+                type:item.type,
+                toaddress:item.toaddress
+            }})
             this.setState({ETHhistory:timearray})
         })
         // 汇金币转账记录
         HjbService.HJBhistory().then(data=>{
-            console.log('eth',data,data);
-            let timearray=[];
-            data.data.map(item=>{return timearray.push(Object.assign(item,{data:item.data.split("G")[0]}))})
+            let timearray=data.data.map(item=>{return {
+                data:Totime(item.data),
+                number:item.number,
+                hash:item.hash,
+                type:item.type,
+                toaddress:item.toaddress
+            }})
             this.setState({HJBhistorydata:timearray})
         })
         // 汇金币买卖记录
         HjbService.HJBBuy_Sellhistory().then(data=>{
-            console.log("hjb",data.data);
-            let timearray=[];
-            data.data.map(item=>{return timearray.push(Object.assign(item,{data:item.time.split("G")[0]},{type:item.type===1?"买入":"卖出"}))})
+            let timearray=data.data.map(item=>{return {
+                data:Totime(item.time),
+                number:item.number,
+                hash:item.hash,
+                type:item.type,
+                toaddress:item.toaddress
+            }})
             this.setState({HJBBuy_Sellhistory:timearray})
         })
     }

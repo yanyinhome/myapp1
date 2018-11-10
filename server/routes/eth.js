@@ -87,7 +87,7 @@ router.post("/ethsend",function(req,res,next){
                           (err,result)=>{
                             if(err){console.log(err);}
                                else{
-                                let time=new Date().toString()
+                                let time=new Date().getTime()
                                 let data={
                                     hash:result,
                                     eth_address:eth_address,

@@ -31,7 +31,11 @@ router.get('/hjbaccount', function(req, res, next) {
       if(req.session.user){
         let user_address=req.session.user.address;
         let hjb_number=web.hjb_contract.balanceOf.call(user_address);
+        let hjb_sellprice=web.hjb_contract.sellPrice.call();
+        let hjb_buyprice=web.hjb_contract.buyPrice.call();
         req.session.user.hjb_number=hjb_number.toString(10);
+        req.session.user.hjb_sellprice=hjb_sellprice;
+        req.session.user.hjb_buyprice=hjb_buyprice;
         let data=req.session.user;
         responseClient(res,200,1,"ok",data);
       }else{
@@ -58,7 +62,7 @@ router.post("/hjbsend",function(req,res,next){
                   if(err){console.log(err)
                     responseClient(res,200,1,"转账失败")}
                     else{
-                      let time=new Date().toString()
+                      let time=new Date().getTime()
                       const data={
                         hash:result,
                         eth_address:user_address,
@@ -101,7 +105,7 @@ router.post("/hjbbuy",function(req,res,next){
               if(err){console.log(err)
                 responseClient(res,200,1,"买入失败")}
                 else{
-                  let time=new Date().toString()
+                  let time=new Date().getTime()
                   const data={
                     hash:result,
                     number:value,
@@ -111,7 +115,7 @@ router.post("/hjbbuy",function(req,res,next){
                   }
                   // 插入数据库
                   console.log(buy_sell_history.insert_history)
-                  client.query(buy_sell_history.insert_history,[data.number,data.hash,data.time,data.type,data.user_address],function(err,result){
+                  client.query(buy_sell_history.insert_history,[data.number,data.hash,data.time,data.type,data.address],function(err,result){
                     if(err){console.log(err)}else{
                         console.log(result);
                     }
@@ -131,6 +135,7 @@ router.post("/hjbsell",function(req,res,next){
   console.log("req",req.body)
   if(req.session.user){
      // 获取用户地址
+     console.log(req.session.user)
      let user_address=req.session.user.address;
      let value=parseInt(req.body.value,10);
         // bignumber尚未解决
@@ -149,7 +154,7 @@ router.post("/hjbsell",function(req,res,next){
               if(err){console.log(err)
                 responseClient(res,200,1,"购买失败")}
                 else{
-                  let time=new Date().toString()
+                  let time=new Date().getTime();
                   const data={
                     hash:result,
                     number:value,
@@ -158,7 +163,7 @@ router.post("/hjbsell",function(req,res,next){
                     address:user_address,
                   }
                   // 插入数据库
-                  client.query(buy_sell_history.insert_history,[data.number,data.hash,data.time,data.type,data.user_address],function(err,result){
+                  client.query(buy_sell_history.insert_history,[data.number,data.hash,data.time,data.type,data.address],function(err,result){
                     if(err){console.log(err)}else{
                         console.log(result);
                     }

@@ -48,7 +48,6 @@ export default class Login extends Component{
               password:this.state.form.pass,
           }).then((data)=>{
             if(data){
-              console.log("登录成功res",data)
               Notification.success({
                 title:"提示",
                 message:data.message,
