@@ -55,7 +55,7 @@ router.post("/hjbsend",function(req,res,next){
         req.session.user.hjb_number=hjb_number;
         if(hjb_number>value){
           web.web3.personal.unlockAccount(user_address,req.session.user.password,1500,(err,result)=>{
-            if(err){console.log(err)
+            if(err){console.log("err",err)
               responseClient(res,200,1,"密码错误")}
               else{
                 web.hjb_contract.transfer.sendTransaction(to_address,value,{from:user_address},function(err,result){

@@ -4,6 +4,8 @@ var MessageSQL = {
     getUserByInfo:'SELECT * from message WHERE username = ? and password = ?',
     // 查询用户或者地址
     findUser:'SELECT * FROM message WHERE username = ? OR address = ?',
+    // 查询昵称
+    findUsername:"SELECT * FROM message WHERE username = ? ",
     // 根据地址查询用户名
     get_username:"SELECT * from message WHERE address = ?",
     updateUserName:'UPDATE message SET username = ? WHERE username = ?',

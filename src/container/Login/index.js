@@ -2,6 +2,7 @@ import React,{Component} from "react";
 import {Button,Layout,Form,Input,Notification}  from "element-react";
 import "element-theme-default";
 import userService from "../../services/userServices";
+import "../Login/Rejist/index.css"
 export default class Login extends Component{
     constructor(props) {
         super(props);      
@@ -69,7 +70,9 @@ export default class Login extends Component{
           }
         });
       }
-      
+      toregist=()=>{
+        this.props.history.push("/regist")
+    }
       handleReset(e) {
         e.preventDefault();
       
@@ -84,25 +87,32 @@ export default class Login extends Component{
       
       render() {
         return (
-          <div style={{marginTop:"10rem"}}>
-              <Layout.Row >
-                  <Layout.Col span="8" offset="8">
-                    <div>
-                    <Form ref="form" model={this.state.form} rules={this.state.rules} labelWidth="100" className="demo-ruleForm">
-                        <Form.Item prop="username" >
-                        <Input value={this.state.form.username} onChange={this.onChange.bind(this, 'username')} autoComplete="off" placeholder="请输入用户名" style={{width:"15rem"}}/>
+             <div>
+                <div className="wrapper"><header><h1 className="top"> 欢迎来到HJB Token，会员专属钱包</h1></header></div>
+                <Layout.Row >
+                  <Layout.Col span="24">
+                 <div style={{width:"25%",margin:"0 auto"}}>
+                 <h1 style={{textAlign:"center",padding:"0 30px",margin: "10px 0 0px 0",fontSize:"28px",fontWeight:"normal"}}>登录</h1>   
+                    <Form ref="form"  model={this.state.form} rules={this.state.rules} labelWidth="100" labelPosition="top">
+                        <Form.Item prop="username" label="昵称">
+                        <Input  size="large" value={this.state.form.username} onChange={this.onChange.bind(this, 'username')} autoComplete="off" placeholder="请输入用户名" />
                         </Form.Item>
-                        <Form.Item prop="pass">
-                        <Input type="password" value={this.state.form.pass} onChange={this.onChange.bind(this, 'pass')} placeholder="请输入密码" style={{width:"15rem"}}></Input>
+                        <Form.Item  prop="pass" label="密码">
+                        <Input size="large" type="password" value={this.state.form.pass} onChange={this.onChange.bind(this, 'pass')} placeholder="请输入密码"></Input>
                         </Form.Item>
                         <Form.Item>
-                        <Button type="primary" onClick={this.handleSubmit.bind(this)} style={{width:"15rem"}}>登录</Button>
+                        <Layout.Row>
+                            <Layout.Col span="8" offset="8">                                
+                                <Button style={{width:"100%",height:"60px",fontSize:"18px"}} type="primary" onClick={this.handleSubmit.bind(this)}>登录</Button>                                
+                            </Layout.Col>
+                        </Layout.Row>
                         </Form.Item>
                     </Form>
-                    </div>
+                 </div>
                 </Layout.Col>
               </Layout.Row>
-          </div>
+              <div className="Tologin"><span>第一次登录?</span><a onClick={this.toregist}>注册</a></div>
+             </div>
         )
       }
       

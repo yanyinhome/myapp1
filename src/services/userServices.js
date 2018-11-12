@@ -34,6 +34,14 @@ class userServices {
             }
         })
     }
+    // 昵称验证
+    checkNickName(data){
+        return xhr({
+            method:"post",
+            url:`${this.url}/users/usertest`,
+            data:{...data}
+        })
+    }
     // 用户信息获取
     userInfo(data){
         return xhr({
