@@ -125,18 +125,18 @@ router.get('/userInfo', function(req, res, next) {
   } 
 });
 // 查询已冻结用户列表
-router.get('/frozen_accounts',function(req,res,next){
+router.get('/frozen_accounts',function(req,res,next){ 
   client.query(frozenSql.frozenAccount_number,function(err,result){
     if(err){
       console.log(err)
     }else{
       responseClient(res,200,1,"ok",{result})
     }
-  })
- 
+  }) 
 })
 // 查询冻结解冻操作的历史记录
 router.get('/frozen_history',function(req,res,next){
+ if(req.session.admin){
   client.query(frozenSql.searchall,function(err,result){
     if(err){
       console.log(err)
@@ -146,6 +146,9 @@ router.get('/frozen_history',function(req,res,next){
       responseClient(res,200,1,"ok",{result:result,admin_name:admin_name})
     }
   })
+ }else{
+   responseClient(res,200,0,"未登录")
+ }
  
 })
 // 用户昵称模糊查询

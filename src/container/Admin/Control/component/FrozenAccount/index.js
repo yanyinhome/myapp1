@@ -3,7 +3,7 @@ import {Button,Form,Input,Select,Notification,Layout,Table}  from "element-react
 import "element-theme-default";
 import HjbService from "../../../../../services/HjbService";
 import userServices from "../../../../../services/userServices";
-import {Headtitle, ResultShow,Changeshow,ChildrenTitle,HistoryList} from "../public";
+import {Headtitle, ResultShow,ChildrenTitle,HistoryList} from "../public";
 import {Totime,bindenter,DimSearch} from "../../../../../fun";
 import {Showlist} from "../../../../../Component/publicConponent";
 // 代币冻结/解冻组件
@@ -13,7 +13,9 @@ export default class FozenAccount extends Component{
         this.state = {
           form: {
             region: '0',
-           address:""
+           address:"",
+           state:"",
+           username:""
           },
           rules:{
             address:[{required:true,message:"地址不能为空",trigger:'blur'}]
@@ -24,7 +26,7 @@ export default class FozenAccount extends Component{
               {
                 label: "冻结日期",
                 prop: "date",
-                width:240
+                width:170
               },
               {
                 label: "昵称",
@@ -34,6 +36,10 @@ export default class FozenAccount extends Component{
                 label: "地址",
                 prop: "address",
                 width:360
+              },
+              {
+                label: "管理员",
+                prop: "adminer",
               }
             ],
             data:[]
@@ -61,15 +67,19 @@ export default class FozenAccount extends Component{
         };
       }
       componentDidMount(){
+        // 绑定回车事件
+        bindenter.bindenter(this.keydown)
         // 查询已冻结的账户列表
       userServices.get_frozen_accounts().then(res=>{
+        console.log(res)
         if(res.data){
           const {data}=res;
           const list=data.result.map(item=>{
             return {
               date:Totime(item.time),
               name:item.username,
-              address:item.address
+              address:item.address,
+              adminer:item.adminname
             }
           })
          this.setState({frozen_account_list:Object.assign({},this.state.frozen_account_list,{data:list})})
@@ -95,68 +105,60 @@ export default class FozenAccount extends Component{
          console.log(err)
        })  
       }
+    // 解除绑定的回车事件
+    componentWillUnmount(){
+      bindenter.removebindenter(this.keydown)
+    }
+    // 重置函数
       handleReset(e) {
         e.preventDefault(); 
         this.setState({form:{region: '',address: ''}});   
         this.refs.form.resetFields()
       }
+    // 回车事件
+      keydown=(e)=>{        
+        if(bindenter.ifenter(e)){
+           this.onSubmit(e)
+        }       
+    } 
+    // 提交请求
       onSubmit(e) {
         e.preventDefault();
-        if(this.state.Changeshow.children.length!==0&&this.state.Changeshow.children.length!==6){
-          HjbService.HjbFroze({region:this.state.form.region,address:this.state.Changeshow.children,username:this.state.Changeshow.username}).then(res=>{
-            let code=res.data.state;
+        if(this.state.form.address.length===42){        
+            const{form}=this.state;
+            let code=form.region;
             switch (code){
-              case 0:
-              if(res.data.result===0){
+              case "0":
+              if(form.state===1){
                 Notification.info({
                   title:"提示",
-                  message:res.message,
-                  duration:2000,
+                  message:"已冻结，勿重复冻结",
+                  duration:1000,
                 })
               }else{
-                Notification.success({
-                  title:"提示",
-                  message:res.message,
-                  duration:2000,
-                })
-                this.setState({resultshow:Object.assign({},this.resultshow,{children:`${this.state.Changeshow.children}${res.message}`,visible:"block",hash:res.data.hash})}) 
+              //  提交请求到服务器
+             this.HandleServer(form)
               }
               return;
-              case 1:
-              if(res.data.result===0){
+              case "1":
+              if(form.state===0){
                 Notification.info({
                   title:"提示",
-                  message:res.message,
+                  message:"账户未冻结，无须解冻",
                   duration:2000,
                 })
               }else{
-                Notification.success({
-                  title:"提示",
-                  message:res.message,
-                  duration:2000,
-                })
+                // 提交请求到服务器
+                this.HandleServer(form)
               }
               return;
-              case 2:
-              if(res.data.result===0){
-                Notification.info({
-                  title:"提示",
-                  message:res.message,
-                  duration:2000,
-                })
-              }else{
-                Notification.success({
-                  title:res.message,
-                  message:`账户汇金币数量：${res.data.result}`,
-                  duration:2000,
-                }) 
-              }
+              case "2":
+            //  提交请求到服务器
+            this.HandleServer(form)
               return;
               default:
-              console.log(res)
               return;
             }
-          }).catch(err=>{console.log(err)})
         }else{
           Notification.info({
             title:"错误",
@@ -166,9 +168,34 @@ export default class FozenAccount extends Component{
         }
 
       }
-      resultSelct=()=>{
-        this.setState({form:Object.assign({},this.state.form,{address:this.state.Changeshow.children})})
+      // 请求提交到服务器，及服务器回应处理
+      HandleServer=(data)=>{
+        HjbService.HjbFroze(data).then(res=>{
+          let code=res.data.state;
+          let result=res.data.result;
+          let hash=res.data.hash
+          console.log(res)
+          switch (code){
+            case 0:
+            this.setState({resultshow:{children:result===0?"冻结失败":"冻结成功",visible:"block",hash:hash?`交易hash：${hash}`:""}})
+            return;
+            case 1:
+            this.setState({resultshow:{children:result===0?"解冻失败":"解冻成功",visible:"block",hash:hash?`交易hash：${hash}`:""}})
+            return;
+            case 2:
+            this.setState({resultshow:{children:`账户汇金币金额：${result}`,visible:"block",hash:"冻结后将无法交易汇金币"}})
+            return;
+            default:
+            return
+          }
+
+        }).catch(err=>{
+          console.log(err)
+        })
       }
+      // resultSelct=()=>{
+      //   this.setState({form:Object.assign({},this.state.form,{address:this.state.Changeshow.children})})
+      // }
       // 添加昵称模糊查询的input的change事件
     change(key,value){
       this.onChange(key,value);
@@ -178,32 +205,35 @@ export default class FozenAccount extends Component{
 checkusername=(value)=>{
   const self=this;
   DimSearch(value,function(res){
-      self.setState({checkresult:Object.assign({},self.state.checkresult.data,{data:res.data.result})}) 
+    if(res.data.result){
+      let dataresult=res.data.result.map(item=>{
+        return Object.assign({},item,{message:item.state===0?"未冻结":"冻结中"})
+      })
+      self.setState({checkresult:Object.assign({},self.state.checkresult.data,{data:dataresult})}) 
+    }
   })
 }
       // 模糊查询显示结果点击事件
     result_click=(e)=>{
-      console.log("e",e.target.id)
-      this.setState({form:Object.assign({},this.state.form,{address:this.state.checkresult.data[e.target.id].address}),checkresult:Object.assign({},this.state.checkresult,{data:[]})})
+      let index=e.target.id;
+      const{form,checkresult}=this.state;
+      this.setState({form:Object.assign({},form,{address:checkresult.data[index].address,state:checkresult.data[index].state,username:checkresult.data[index].username}),checkresult:Object.assign({},checkresult,{data:[]})})
   }
       // 输入昵称时查询函数
       onChange(key, value) {
         this.setState({form:Object.assign({},this.state.form,{[key]:value})});
-        if(value===""){
-          this.setState({Changeshow:Object.assign({},this.state.Changeshow,{visible:"none"})})
-        }else{
-          this.setState({Changeshow:Object.assign({},this.state.Changeshow,{visible:"inline-block"})})
-          userServices.usersearch({username:value,address:value}).then(res=>{
-           const {data}=res;
-           if(res.code===1){
-              this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:`${data.address}`,state:data.state,username:data.username,action:data.state===1?"冻结中":"未冻结"})})
-           }
-          //  else{
-          //   this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:"未查询到用户"})})
-          //  }
-          }).catch(err=>{console.log(err)})
+        // if(value===""){
+        //   this.setState({Changeshow:Object.assign({},this.state.Changeshow,{visible:"none"})})
+        // }else{
+        //   this.setState({Changeshow:Object.assign({},this.state.Changeshow,{visible:"inline-block"})})
+        //   userServices.usersearch({username:value,address:value}).then(res=>{
+        //    const {data}=res;
+        //    if(res.code===1){
+        //       this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:`${data.address}`,state:data.state,username:data.username,action:data.state===1?"冻结中":"未冻结"})})
+        //    }
+        //   }).catch(err=>{console.log(err)})
          
-        }        
+        // }        
       }
       // 显示冻结解冻状态的函数
     render(){
@@ -224,7 +254,7 @@ checkusername=(value)=>{
         <Input style={{width:300}} value={this.state.form.address} onChange={this.change.bind(this, 'address')} placeholder="输入地址或者用户名"></Input>
       </Form.Item>
       <Form.Item>
-        <Changeshow onclick={this.resultSelct} visible={this.state.Changeshow.visible}>{this.state.Changeshow.children}{this.state.Changeshow.action}</Changeshow>
+        {/* <Changeshow onclick={this.resultSelct} visible={this.state.Changeshow.visible}>{this.state.Changeshow.children}{this.state.Changeshow.action}</Changeshow> */}
         <Showlist data={this.state.checkresult.data} click={this.result_click}></Showlist>
       </Form.Item>
       <Form.Item>
@@ -245,6 +275,7 @@ checkusername=(value)=>{
            style={{width: '100%'}}
            columns={this.state.frozen_account_list.columns}
            data={this.state.frozen_account_list.data}
+           maxHeight={600}
            stripe={true}
            border={true}
           />

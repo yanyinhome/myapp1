@@ -9,7 +9,7 @@ const ChildrenDiv=({children="次级列表"})=><div style={{color:"#333",backgro
 // 显示结果组件
 const ResultShow=({children="暂无结果",visible="block",hash=""})=>{return(
     <div style={{height:"150px",display:visible}}>                                                   
-    <Tag type="primary">{children}</Tag><br></br><Tag type="gray">交易哈希：{hash}</Tag>
+    <Tag type="primary">{children}</Tag><br></br><Tag type="gray">{hash}</Tag>
      </div>
 )}
 // 查询结果显示组件
@@ -19,6 +19,6 @@ const HistoryList=({data=[{date:"",user:"",username:"",action:"",message:"succes
     const lilist=data.map((item,index)=>{
         return <li style={{margin:"5px 0"}} key={index}>{item.date}<Tag type="gray" style={{margin:"0 0 0 10px"}}>{item.user}</Tag><Tag style={{marginLeft:"10px"}} type={item.type}> {item.action} </Tag><Tag style={{margin:"0 10px"}} type="primary">{item.username}</Tag>{item.message}</li>   
     })
-    return <ul>{lilist}</ul>
+    return <ul style={{maxHeight:"600px",overflow:"auto"}}>{lilist}</ul>
 }
 export {Headtitle,ChildrenTitle,ChildrenDiv,ResultShow,Changeshow,HistoryList}

@@ -2,9 +2,9 @@ import React,{Component} from "react";
 import {Button,Form,Input,Notification,Layout}  from "element-react";
 import "element-theme-default";
 import HjbService from "../../../../../services/HjbService";
-import userServices from "../../../../../services/userServices"
-import {Headtitle,Changeshow,ChildrenTitle,HistoryList} from "../public";
-import { Totime } from "../../../../../fun";
+import {Headtitle,ChildrenTitle,HistoryList} from "../public";
+import {Totime,DimSearch,bindenter} from "../../../../../fun";
+import {Showlist} from "../../../../../Component/publicConponent"
 // 代币增发组件
 export default class MintToken extends Component{
     constructor(props) {
@@ -13,7 +13,9 @@ export default class MintToken extends Component{
         this.state = {
           form: {
             number: '',
+            state:"",
             address: '',
+            username:""
           },
           rules:{
             number:[{
@@ -38,6 +40,10 @@ export default class MintToken extends Component{
               },
              ]
           },
+            // 模糊查询结果暂存
+            checkresult:{
+            data:[]
+          },
           // 现已发行代币数
           tokennumeber:"未查询到结果",
           // 冻结历史列表数据
@@ -53,6 +59,9 @@ export default class MintToken extends Component{
         };
       }
       componentDidMount(){
+        // 绑定回车事件
+        bindenter.bindenter(this.keydown)
+        // 查询汇金币信息
         HjbService.HJBmessage().then(
           res=>{
               const{data}=res;
@@ -79,6 +88,17 @@ export default class MintToken extends Component{
           console.log(err)
         })
       }
+       // 解除绑定的回车事件
+    componentWillUnmount(){
+      bindenter.removebindenter(this.keydown)
+    }
+      // 回车事件
+      keydown=(e)=>{        
+        if(bindenter.ifenter(e)){
+            this.onSubmit(e)
+        }       
+    } 
+    // 重置内容
       handleReset(e) {
         e.preventDefault(); 
         this.setState({form:{number:"",address:""}});    
@@ -89,8 +109,9 @@ export default class MintToken extends Component{
         this.refs.form.validate(
           (valid)=>{
               if(valid){
-                if(this.state.Changeshow.children.length!==0&&this.state.Changeshow.children.length!==6){
-                  HjbService.HjbZengfa({number:this.state.form.number,address:this.state.Changeshow.children,username:this.state.Changeshow.username}).then(res=>{
+                if(this.state.form.address.length===42){
+                  const{form}=this.state;
+                  HjbService.HjbZengfa({number:form.number,address:form.address,username:form.username}).then(res=>{
                     if(res.data.number){
                       Notification.info({
                         title:res.data.message,
@@ -110,27 +131,33 @@ export default class MintToken extends Component{
           }  
         )
       } 
-      onChange(key, value) {
-        this.setState({form:Object.assign({},this.state.form,{[key]:value})});
-        if(value===""){
-          this.setState({Changeshow:Object.assign({},this.state.Changeshow,{visible:"none"})})
-        }else{
-          this.setState({Changeshow:Object.assign({},this.state.Changeshow,{visible:"inline-block"})})
-          userServices.usersearch({username:value,address:value}).then(res=>{
-           const {data}=res;
-           if(res.code===1){
-              this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:`${data.address}`,state:data.state,username:data.username})})
-           }else{
-            this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:"未查询到用户"})})
-           }
-          }).catch(err=>{console.log(err)})
-         
-        }      
-      }
-      // 点击查询结果添加到输入框
-      resultSelct=()=>{
-        this.setState({form:Object.assign({},this.state.form,{address:this.state.Changeshow.children})})
-      }
+      // 添加昵称模糊查询的input的change事件
+    change(key,value){
+      this.onChange(key,value);
+      this.checkusername(value);
+    }
+        // 昵称模糊查询
+    checkusername=(value)=>{
+      const self=this;
+      DimSearch(value,function(res){
+        if(res.data.result){
+          let dataresult=res.data.result.map(item=>{
+            return Object.assign({},item,{message:item.state===0?"未冻结":"冻结中"})
+          })
+          self.setState({checkresult:Object.assign({},self.state.checkresult.data,{data:dataresult})}) 
+        }
+      })
+    }
+    // onChange事件
+          onChange(key, value) {
+            this.setState({form:Object.assign({},this.state.form,{[key]:value})});    
+          }
+      // 模糊查询显示结果点击事件
+      result_click=(e)=>{
+        let index=e.target.id;
+        const{form,checkresult}=this.state;
+        this.setState({form:Object.assign({},form,{address:checkresult.data[index].address,state:checkresult.data[index].state,username:checkresult.data[index].username}),checkresult:Object.assign({},checkresult,{data:[]})})
+    }
     render(){
         return(
            <div>
@@ -142,10 +169,10 @@ export default class MintToken extends Component{
                       <Input style={{width:300}} value={this.state.form.number} onChange={this.onChange.bind(this, 'number')} placeholder="请输入要增发的数量"></Input>
                     </Form.Item>
                     <Form.Item label="增发地址" prop="address">
-                      <Input style={{width:300}} value={this.state.form.address} onChange={this.onChange.bind(this, 'address')} placeholder="请输入要增发的账户昵称或地址"></Input>
+                      <Input style={{width:300}} value={this.state.form.address} onChange={this.change.bind(this, 'address')} placeholder="请输入要增发的账户昵称或地址"></Input>
                     </Form.Item>
                     <Form.Item>
-                    <Changeshow onclick={this.resultSelct} visible={this.state.Changeshow.visible}>{this.state.Changeshow.children}{this.state.Changeshow.action}</Changeshow>
+                    <Showlist data={this.state.checkresult.data} click={this.result_click}></Showlist>
                     </Form.Item>
                     <Form.Item>
                       <Button type="primary" nativeType="submit">确定</Button>
@@ -161,7 +188,8 @@ export default class MintToken extends Component{
                  <h3>现已发行代币：{this.state.tokennumeber}</h3>
                  <p>
                    注释:<br/>
-                   输入地址或者用户名即可给对方增发汇金币
+                   输入地址或者用户名即可给对方增发汇金币<br/>
+                   冻结中的账户无法增发汇金币
                  </p>
                </Layout.Col>
                <Layout.Col lg="12" mg="24">

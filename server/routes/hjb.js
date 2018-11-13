@@ -4,6 +4,7 @@ var DBconfig=require("../db/DBconfig");
 var responseClient=require("../util/util");
 var tourial_historysql=require("../db/tourial_historysql");
 var buy_sell_history=require("../db/buy_sellSql");
+var messagesql=require("../db/messagesql");
 var admin_setpriceSql=require("../db/admin_setpriceSql");
 var frozenSQL = require('../db/frozenSql');
 var admin_minttokenSQL =require('../db/admin_minttokenSql');
@@ -235,9 +236,11 @@ router.get('/hjbmessage',function(req,res,next){
 router.post('/hjb_frozen',function(req,res,next){
   if(req.session.admin){
     let adminaddress=req.session.admin.address;
+    let adminer=req.session.admin.username;
     let pass=req.session.admin.password;
     let state=req.body.region;
     let address=req.body.address;
+    let username=req.body.username;
     let times=new Date().getTime()
     switch(state){
       case "0":
@@ -250,12 +253,16 @@ router.post('/hjb_frozen',function(req,res,next){
               console.log(err)
               responseClient(res,200,1,"冻结失败",{state:0,result:0})
             }else{
-              client.query(frozenSQL.insert_history,[req.body.username,req.body.address,1,times],function(err,result){
+              client.query(frozenSQL.insert_history,[username,address,1,times,adminer],function(err,result){
                 if(err){console.log(err)}
                   else{
                     console.log(result)
                   }
-              })     
+              });
+              client.query(messagesql.updateUserState,[1,address],function(err,result){
+                if(err){console.log(err)}
+                  else{console.log(result)}
+              })    
               responseClient(res,200,1,"冻结成功",{state:0,result:1,hash:result})
             }
           });               
@@ -272,12 +279,16 @@ router.post('/hjb_frozen',function(req,res,next){
               console.log(err);
               responseClient(res,200,1,"解冻失败",{state:1,result:0,})
             }else{
-              client.query(frozenSQL.insert_history,[req.body.username,req.body.address,0,times],function(err,result){
+              client.query(frozenSQL.insert_history,[username,address,0,times,adminer],function(err,result){
                 if(err){console.log(err)}
                   else{
                     console.log(result)
                   }
-              })     
+              }) 
+              client.query(messagesql.updateUserState,[0,address],function(err,result){
+                if(err){console.log(err)}
+                  else{console.log(result)}
+              })       
               responseClient(res,200,1,"解冻成功",{state:1,result:1,hash:result})
             }
           });    
@@ -294,7 +305,7 @@ router.post('/hjb_frozen',function(req,res,next){
         responseClient(res,200,1,"查询成功",data)        
       }else{
         console.log(2)
-        responseClient(res,200,1,"查询失败",{state:2,result:0})
+        responseClient(res,200,1,"查询失败",{state:2,result:"无查询结果"})
       }      
       return;
       default:
