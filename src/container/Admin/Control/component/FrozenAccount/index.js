@@ -4,7 +4,8 @@ import "element-theme-default";
 import HjbService from "../../../../../services/HjbService";
 import userServices from "../../../../../services/userServices";
 import {Headtitle, ResultShow,Changeshow,ChildrenTitle,HistoryList} from "../public";
-import {Totime} from "../../../../../fun"
+import {Totime,bindenter,DimSearch} from "../../../../../fun";
+import {Showlist} from "../../../../../Component/publicConponent";
 // 代币冻结/解冻组件
 export default class FozenAccount extends Component{
     constructor(props) {
@@ -53,6 +54,10 @@ export default class FozenAccount extends Component{
             state:"",
             action:""
           },
+          // 模糊查询结果暂存
+          checkresult:{
+            data:[]
+          }
         };
       }
       componentDidMount(){
@@ -164,7 +169,24 @@ export default class FozenAccount extends Component{
       resultSelct=()=>{
         this.setState({form:Object.assign({},this.state.form,{address:this.state.Changeshow.children})})
       }
-      // 输入昵称是查询函数
+      // 添加昵称模糊查询的input的change事件
+    change(key,value){
+      this.onChange(key,value);
+      this.checkusername(value);
+  }
+  // 昵称模糊查询
+checkusername=(value)=>{
+  const self=this;
+  DimSearch(value,function(res){
+      self.setState({checkresult:Object.assign({},self.state.checkresult.data,{data:res.data.result})}) 
+  })
+}
+      // 模糊查询显示结果点击事件
+    result_click=(e)=>{
+      console.log("e",e.target.id)
+      this.setState({form:Object.assign({},this.state.form,{address:this.state.checkresult.data[e.target.id].address}),checkresult:Object.assign({},this.state.checkresult,{data:[]})})
+  }
+      // 输入昵称时查询函数
       onChange(key, value) {
         this.setState({form:Object.assign({},this.state.form,{[key]:value})});
         if(value===""){
@@ -175,9 +197,10 @@ export default class FozenAccount extends Component{
            const {data}=res;
            if(res.code===1){
               this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:`${data.address}`,state:data.state,username:data.username,action:data.state===1?"冻结中":"未冻结"})})
-           }else{
-            this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:"未查询到用户"})})
            }
+          //  else{
+          //   this.setState({Changeshow:Object.assign({},this.state.Changeshow,{children:"未查询到用户"})})
+          //  }
           }).catch(err=>{console.log(err)})
          
         }        
@@ -198,10 +221,11 @@ export default class FozenAccount extends Component{
         </Select>
       </Form.Item>
       <Form.Item label="输入地址" prop="address">
-        <Input style={{width:300}} value={this.state.form.address} onChange={this.onChange.bind(this, 'address')} placeholder="输入地址或者用户名"></Input>
+        <Input style={{width:300}} value={this.state.form.address} onChange={this.change.bind(this, 'address')} placeholder="输入地址或者用户名"></Input>
       </Form.Item>
       <Form.Item>
         <Changeshow onclick={this.resultSelct} visible={this.state.Changeshow.visible}>{this.state.Changeshow.children}{this.state.Changeshow.action}</Changeshow>
+        <Showlist data={this.state.checkresult.data} click={this.result_click}></Showlist>
       </Form.Item>
       <Form.Item>
         <Button type="primary" nativeType="submit">确定</Button>

@@ -148,19 +148,22 @@ router.get('/frozen_history',function(req,res,next){
   })
  
 })
-// 用户查询
+// 用户昵称模糊查询
 router.post('/usersearch', function(req, res, next) {
   if(req.body){
     const {username,address}=req.body;
-    client.query(frozenSql.search_user_state,[username,address],function(err,result){
+    // let sql=client.format(MessageSQL.findUser,[`${username}%`,address])
+    // console.log(sql)
+    client.query(MessageSQL.findUser,[`${username}%`,address],function(err,result){
       if(err){console.log(err)}
         else{
           if(result.length===0){responseClient(res,200,0,"ok")}
             else{
-              responseClient(res,200,1,"ok",result[0])
+              responseClient(res,200,1,"ok",{result})
             }
         }
     })
+    // responseClient(res,200,1,"ok")
   }  
 });
 

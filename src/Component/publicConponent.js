@@ -20,8 +20,13 @@ class Itemlist extends Component{
         )
     }
 }
-// 标题显示
-const Title=({children="标题"})=>{
-    return <h2>{children}</h2>
+// 模糊搜索结果展示组件
+const Showlist=({data=[],click=(e)=>{console.log(e.target.id)},over=(e)=>{e.target.style.color="red"},leave=(e)=>{e.target.style.color=""}})=>{
+    let lists=data.map((item,index)=><li style={{cursor:"pointer"}} key={index} id={index} onClick={click} onMouseOver={over} onMouseLeave={leave}>{item.username}</li>)
+    return (
+            <ul>
+            {lists}
+            </ul>
+    )
 }
-export {Itemlist};
+export {Itemlist,Showlist};
