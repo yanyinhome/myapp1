@@ -1,6 +1,0 @@
-/* 区块信息列表 */
-.accounts table{width: 100%;text-align: center}
-.accounts table tr:nth-child(2n+3){background: #f8f3ef;}
-.accounts th{border: 1px solid #ccc;color:#c79127;height: 70px;line-height: 60px;font-size: 18px;}
-.accounts td{border: 1px solid #ccc;color: #5a5244;height: 70px;line-height: 70px;font-size: 18px;}
-.info{height: 50px;line-height: 50px;font-size: 18px;color: #33302e;padding-left:36px;}

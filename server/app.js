@@ -5,9 +5,12 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-let token=require('./routes/token');
+var hjb=require('./routes/hjb');
+var eth=require('./routes/eth');
+var test=require('./routes/test');
 var bodyParser = require("body-parser");
 var expresssession=require("express-session")
+// var web=require("./web3")
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,7 +31,7 @@ app.use(logger('dev'));
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
 // 解决跨域问题,以及携带cookie问题
-app.use(require('cors')({credentials: true, origin: 'http://localhost:3000'}));
+app.use(require('cors')({credentials: true, origin: 'http://192.168.124.9:3000'}));
 app.use(cookieParser());
 app.use(expresssession(
   {secret:"123456",
@@ -44,13 +47,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 // 处理用户管理
 app.use('/users', usersRouter);
-//处理代币路径
-app.use('/token',token)
+//处理代币
+app.use('/hjb',hjb);
+// 处理以太币
+app.use('/eth',eth);
+// 测试
+app.use('/test',test);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
