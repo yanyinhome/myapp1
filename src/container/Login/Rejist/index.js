@@ -117,9 +117,10 @@ export default class Regist extends Component{
         return(
             <div>
                 <div className="wrapper"><header><h1 className="top"> 欢迎来到HJB Token，会员专属钱包</h1></header></div>
-                <Layout.Row style={{width:"20%",margin:"0 auto"}}>
+                <Layout.Row style={{width:"20%",margin:"0 auto 10px",backgroundColor:"#f3f3f3",padding:"20px 30px",border:"1px solid #ccc"}}>
                     <Layout.Col span="24"><div>
-                        <h1 style={{textAlign:"center",padding:" 0 0 30px",margin: "10px 0 0px 0",fontSize:"28px",fontWeight:"normal"}}>注册</h1>   
+                        <h1 style={{textAlign:"center",padding:" 0 0 10px",margin: "10px 0 0px 0",fontSize:"28px",fontWeight:"normal"}}>注册</h1>   
+                        <hr style={{marginBottom:"20px"}}/>
                         <Form  ref="form" model={this.state.form} rules={this.state.rules} labelWidth="100" className="demo-ruleForm" labelPosition="top">
                             <Form.Item label="昵称" prop="nickname">
                                 <Input size="large" value={this.state.form.nickname} onChange={this.Change.bind(this, 'nickname')}></Input>

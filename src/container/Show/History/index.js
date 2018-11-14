@@ -89,11 +89,12 @@ export default class History extends Component{
         })
         // 汇金币买卖记录
         HjbService.HJBBuy_Sellhistory().then(data=>{
+            console.log(data)
             let timearray=data.data.map(item=>{return {
                 data:Totime(item.time),
                 number:item.number,
                 hash:item.hash,
-                type:item.type,
+                type:item.type===1?"买入":"卖出",
                 toaddress:item.toaddress
             }})
             this.setState({HJBBuy_Sellhistory:timearray})
@@ -103,7 +104,7 @@ export default class History extends Component{
         // let itemlist=this.state.history.map(item=>(<p key={item.hash}><span>{item.toaddress}</span><span>{item.number}</span><span>{item.hash}</span><span>{item.data.split("(")[0]}</span></p>))
         return(
             <div>
-                 <Tabs activeName="1" onTabClick={ (tab) => console.log(tab.props.name) }>
+                 <Tabs  onTabClick={ (tab) => console.log(tab.props.name) }>
                     <Tabs.Pane label="以太币转账" name="1">
                             <Table
                             style={{width: '100%'}}

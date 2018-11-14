@@ -91,8 +91,9 @@ export default class Login extends Component{
                 <div className="wrapper"><header><h1 className="top"> 欢迎来到HJB Token，会员专属钱包</h1></header></div>
                 <Layout.Row >
                   <Layout.Col span="24">
-                 <div style={{width:"20%",margin:"0 auto"}}>
+                 <div style={{width:"20%",margin:"0 auto 10px",backgroundColor:"#f3f3f3",padding:"20px 30px",border:"1px solid #ccc"}}>
                  <h1 style={{textAlign:"center",padding:"0 30px",margin: "10px 0 0px 0",fontSize:"28px",fontWeight:"normal"}}>登录</h1>   
+                 <hr style={{margin:"10px 0"}}/>
                     <Form ref="form"  model={this.state.form} rules={this.state.rules} labelWidth="100" labelPosition="top">
                         <Form.Item prop="username" label="昵称">
                         <Input  size="large" value={this.state.form.username} onChange={this.onChange.bind(this, 'username')} autoComplete="off" placeholder="请输入用户名" />
