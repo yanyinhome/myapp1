@@ -103,7 +103,7 @@ export default class Login extends Component{
                         <Form.Item>
                         <Layout.Row>
                             <Layout.Col span="8" offset="8">                                
-                                <Button style={{width:"100%",height:"60px",fontSize:"18px"}} type="primary" onClick={this.handleSubmit.bind(this)}>登录</Button>                                
+                                <Button style={{width:"100%",height:"50px",fontSize:"18px"}} type="primary" onClick={this.handleSubmit.bind(this)}>登录</Button>                                
                             </Layout.Col>
                         </Layout.Row>
                         </Form.Item>

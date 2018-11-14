@@ -135,7 +135,7 @@ export default class Regist extends Component{
                                 <Layout.Row>
                                     <Layout.Col span="8" offset="8">
                                         <div>
-                                        <Button disabled={this.state.checkresult.buttonvasible} style={{width:"100%",height:"60px",fontSize:"18px"}} type="primary" onClick={this.handleSubmit.bind(this)}>注册</Button>
+                                        <Button disabled={this.state.checkresult.buttonvasible} style={{width:"100%",height:"50px",fontSize:"18px"}} type="primary" onClick={this.handleSubmit.bind(this)}>注册</Button>
                                         </div>
                                     </Layout.Col>
                                 </Layout.Row>

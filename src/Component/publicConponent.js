@@ -14,7 +14,7 @@ class Item extends Component{
     // 整个列表组件
 class Itemlist extends Component{
     render(){
-        let itemlist=this.props.imgarry.map((item)=><Item title={item.value} key={item.id} img={item.img} link={item.link}/>);
+        const itemlist=this.props.imgarry.map((item)=><Item title={item.value} key={item.id} img={item.img} link={item.link}/>);
         return(
                 <ul>{itemlist}</ul>            
         )

@@ -97,6 +97,7 @@ export default class Token extends Component{
                 const self=this;
                 HjbService.HjbAccounts().then(
                     res=>{
+                        console.log(res)
                         if(res){
                             if(Object.keys(res.data).length!==0){
                                 let eth=res.data.eth_number;

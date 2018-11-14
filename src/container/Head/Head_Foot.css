@@ -13,11 +13,43 @@
 .top .container .right a{display: inline-block;margin-left: 20px;}
 .top .right .left .el-input{top: 5px;}
 .top .right .left input{width: 200px}
-.top .fr{margin-right: 50px}
-.top .fr ul li{float: left;}
-.top .fr li a{font-size: 14px;color: #fff;display: inline-block;margin-right: 20px;}
-.top .fr li a:hover{color: #7a98f7;}
-.top .fr li a img{width: 18px;height:18px;}
+.top .fr{margin-right: 50px;}
+.top .fr>ul>li{float: left;}
+.top .fr>ul>li>a{font-size: 14px;color: #fff;display: inline-block;margin-right: 20px;}
+.top .fr>li>a:hover{color: #7a98f7;}
+.top .fr>li>a>img{width: 18px;height:18px;}
+/* 注销组件 */
+#loadout{
+  right: 0;
+  position: absolute;
+  width:160px;
+  background-color:#f3f3f3;
+  z-index: 99;
+  border:1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175)
+  }
+#loadout>li{
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;  
+}
+#loadout>li img{
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+}
+#loadout>li>a{
+  margin: 7px 0;
+  font-size: 14px;
+  display: block;
+  line-height: 1.5em;
+  padding: 3px 20px;
+  color: #346aa9;
+  cursor: pointer;
+}
+#loadout>li>a:hover{
+  background-color: #346aa9;
+  color: #fff;
+}
 /* 底部 */
   .tail{
     margin-top: 15px;

@@ -3,6 +3,9 @@ import './Head_Foot.css';
 import {Link} from 'react-router-dom';
 import logo from '../../../static/img/logo.png';
 import set from '../../../static/img/set.png';
+import user from '../../../static/img/profile.png';
+import setting from '../../../static/img/settings.png';
+import logout from '../../../static/img/logout.png';
 import {Itemlist} from "../../Component/publicConponent";
 import{Input,Button} from "element-react";
 import "element-theme-default";
@@ -29,17 +32,30 @@ class  Unload extends Component{
         )
     }
 }
+// 注销组件
+class LoadOut extends Component{
+    render(){
+        return(
+            <ul id="loadout" style={{display:this.props.display}}>
+            <li><Link to={Config.routerconfig.pathconfig.shezhi.url}><img src={user} alt=""></img>账户</Link></li>
+            <li><Link id="link2" to={Config.routerconfig.pathconfig.shezhi.url}><img src={setting} alt=""></img>设置</Link></li>
+            <li><Link onClick={this.props.logout} id="link3" to="/login"><img src={logout} alt=""></img>注销</Link></li>
+          </ul>
+        )
+    }
+}
 // 已登录组件
 class  Isload extends Component{
     render(){
         return(
             <ul>
-                <li className="register" style={{position:"relative"}}>
-                    <a onClick={this.props.toggle}>{this.props.loadstate}</a>
-                    <a  style={{position:"absolute",top:"65px",height:"40px",lineHeight:"40px",fontSize:" 16px",color:"#346aa9",width: "50px",left:"0px",margin:"0",zIndex:"100",background:"#f3f3f3",textAlign:"center",display:this.props.display}}
-                       onClick={this.props.logout}>注销</a>
+                <li className="register">
+                <Link style={{cursor:"pointer"}} to={Config.routerconfig.pathconfig.shezhi.url}>{this.props.loadstate}</Link>
                 </li>
-                <li><Link to={Config.routerconfig.pathconfig.shezhi.url}><img src={set} alt=""></img></Link></li>
+                <li style={{position:"relative"}}>
+                    <img id="setting" onClick={this.props.loadoutshow} src={set} alt="" style={{width:"18px",height:"18px",cursor:"pointer"}}></img>
+                    <LoadOut display={this.props.display} loadout={this.props.logout}></LoadOut>
+                </li>
             </ul>
         )
     }
@@ -57,20 +73,25 @@ export default class Head extends  Component{
             display:"none",
         }
     }
-    // 点击显示注销按钮
-    toggle=()=>{
-        this.setState((prevState) => ({
-            toggle_display:prevState.toggle_display?false:true,
-            display:prevState.toggle_display?"block":"none"
-          }))        
-    }
     // 注销登录函数
     logout=()=>{
         userService.logout().then(data=>{console.log(data)})
         // this.props.history.push('/login')
         this.setState({isloaded:false});
     }
+    // 注销界面隐藏
+    loadouthide=(e)=>{
+        if(e.target.id!=="setting"){
+            this.setState({display:"none"})
+        }
+    }
+    // 注销界面显示
+    loadoutshow=()=>{
+        console.log(1)
+        this.setState({display:"block"})
+    }
     componentDidMount(){
+        document.addEventListener("click",this.loadouthide)
         const self=this;
         // 从服务器调用是否登录的验证并更改状态
         userService.userInfo().then(
@@ -84,15 +105,18 @@ export default class Head extends  Component{
                }         
             })
     }
+    componentWillMount(){
+        // document.removeEventListener("click",this.loadouthide)
+    }
     render(){
         let loadshow=null;
         if(this.state.isloaded){
-            loadshow = <Isload loadstate={this.state.loadstate} toggle={this.toggle} display={this.state.display} logout={this.logout}/>;
+            loadshow = <Isload loadstate={this.state.loadstate} display={this.state.display} logout={this.logout} loadoutshow={this.loadoutshow} />;
         }else{
             loadshow = <Unload loadstate={this.state.loadstate}/>;
         }
         return(
-            <div className="top">
+            <div className="top" style={{zIndex:999}}>
                 <div className='container'>
                 <div className="fr">
                 {loadshow}
