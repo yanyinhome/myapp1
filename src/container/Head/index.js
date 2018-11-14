@@ -39,7 +39,7 @@ class LoadOut extends Component{
             <ul id="loadout" style={{display:this.props.display}}>
             <li><Link to={Config.routerconfig.pathconfig.shezhi.url}><img src={user} alt=""></img>账户</Link></li>
             <li><Link id="link2" to={Config.routerconfig.pathconfig.shezhi.url}><img src={setting} alt=""></img>设置</Link></li>
-            <li><Link onClick={this.props.logout} id="link3" to="/login"><img src={logout} alt=""></img>注销</Link></li>
+            <li><a onClick={this.props.logout} id="link3" ><img src={logout} alt=""></img>注销</a></li>
           </ul>
         )
     }
@@ -54,7 +54,7 @@ class  Isload extends Component{
                 </li>
                 <li style={{position:"relative"}}>
                     <img id="setting" onClick={this.props.loadoutshow} src={set} alt="" style={{width:"18px",height:"18px",cursor:"pointer"}}></img>
-                    <LoadOut display={this.props.display} loadout={this.props.logout}></LoadOut>
+                    <LoadOut display={this.props.display} logout={this.props.logout}></LoadOut>
                 </li>
             </ul>
         )
@@ -76,7 +76,7 @@ export default class Head extends  Component{
     // 注销登录函数
     logout=()=>{
         userService.logout().then(data=>{console.log(data)})
-        // this.props.history.push('/login')
+        this.props.history.push('/login')
         this.setState({isloaded:false});
     }
     // 注销界面隐藏
