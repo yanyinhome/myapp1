@@ -25,9 +25,9 @@ const MintToken=Loadable({
 const FozenAccount=Loadable({
   loader:()=>import("./component/FrozenAccount"),
   loading:Loading}); 
-// 角色权限组件
-const Permission=Loadable({
-  loader:()=>import("./component/Permission"),
+// 修改LOGO组件
+const LogoChange=Loadable({
+  loader:()=>import("./component/LogoChange"),
   loading:Loading}); 
 // 后台用户展示组件
 const AdminAccounts=Loadable({
@@ -61,9 +61,9 @@ export default class Control extends Component{
           console.log(err)
         })
       }
-      loadout=()=>{
-        this.setState({loadout_display:"block"})
-      }
+      // loadout=()=>{
+      //   this.setState({loadout_display:"block"})
+      // }
       handleReset(e) {
         e.preventDefault();
       
@@ -82,7 +82,7 @@ export default class Control extends Component{
 
       }
       onSelect=(key,e)=>{
-        console.log(key)
+        // console.log(key)
           switch (key) {            
               case "1":
               this.props.history.push(`${this.props.match.url}`)
@@ -133,7 +133,8 @@ export default class Control extends Component{
                   <Layout.Col span="3" style={{backgroundColor:"#324157",boxShadow:"-4px 0 6px rgba(0,0,0,.15) inset",height:"100%",position:"fixed",zIndex:"999",minWidth:"220px"}}>
                     <img src={logo} alt="logo" style={{width:"auto",height:"50px",display:"block",margin:"20px auto"}}></img>
                     <h5 style={{padding:"8px 15px",margin:"10px",background: "rgba(255,255,255,.4)",borderRadius:"4px"}}>{this.state.username}&nbsp;&nbsp;管理员 
-                    <Popover placement="bottom" width="160" trigger="click" visible={this.state.visible}  content={(
+                    <span style={{display:"inline-block",float:"right",marginRight:"20px",cursor:"pointer"}} onClick={()=>{console.log("1")}}>退出</span>
+                    {/* <Popover placement="bottom" width="160" trigger="click" visible={this.state.visible}  content={(
                       <div>
                         <h3>警告</h3>
                         <p>确定要退出吗</p>
@@ -144,7 +145,7 @@ export default class Control extends Component{
                       </div>
                     )}>
                     <span style={{display:"inline-block",float:"right",marginRight:"20px",cursor:"pointer"}} onClick={()=>{console.log("1")}}>退出</span>
-                    </Popover>
+                    </Popover> */}
                     </h5>
                     <Menu  className="el-menu-vertical-demo" theme="dark" onOpen={this.onOpen.bind(this)} onClose={this.onClose.bind(this)} onSelect={this.onSelect}>
                       <Menu.Item index="1"><i className="el-icon-menu"></i>控制面板</Menu.Item>
@@ -155,7 +156,7 @@ export default class Control extends Component{
                           <Menu.Item index="2-4">设置阈值信息</Menu.Item>
                       </Menu.SubMenu>
                       <Menu.SubMenu index="3" title={<span><i className="el-icon-setting"></i>系统设置</span>}>
-                          <Menu.Item index="3-1">权限角色</Menu.Item>
+                          <Menu.Item index="3-1">修改LOGO</Menu.Item>
                           <Menu.Item index="3-2">后台用户</Menu.Item>
                       </Menu.SubMenu>
                     </Menu>
@@ -166,7 +167,7 @@ export default class Control extends Component{
                     <Route path={`${this.props.match.url}/token2`}  component={ SetPrice}></Route>
                     <Route path={`${this.props.match.url}/token3`}  component={ MintToken}></Route>
                     <Route path={`${this.props.match.url}/token4`}  component={ SetGAS}></Route>
-                    <Route path={`${this.props.match.url}/seting1`}  component={ Permission}></Route>
+                    <Route path={`${this.props.match.url}/seting1`}  component={LogoChange}></Route>
                     <Route path={`${this.props.match.url}/seting2`}  component={ AdminAccounts}></Route>
                   </Layout.Col>
               </Layout.Row>

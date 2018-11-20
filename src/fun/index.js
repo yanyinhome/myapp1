@@ -35,5 +35,11 @@ const DimSearch=(value,next)=>{
         }).catch(err=>{console.log(err)})
     }
 }
+// 昵称验证函数
+const CheckNickName=(value)=>{
+    return userServices.checkNickName({nickname:value}).catch(err=>{
+        console.log(err)
+    })
+}
 const bindenter=new BindEnter();
-export {Totime,bindenter,DimSearch}
+export {Totime,bindenter,DimSearch,CheckNickName}
