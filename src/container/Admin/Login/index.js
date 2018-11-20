@@ -2,6 +2,7 @@ import React,{Component} from "react";
 import {Button,Layout,Form,Input,Notification}  from "element-react";
 import "element-theme-default";
 import adminService from "../../../services/adminServices";
+import {bindenter} from "../../../fun";
 export default class Login extends Component{
     constructor(props) {
         super(props);      
@@ -34,6 +35,20 @@ export default class Login extends Component{
             ]
           }
         };
+      }
+      componentDidMount(){
+        //绑定回车
+        bindenter.bindenter(this.keydown)
+      }
+      // 回车事件
+      keydown=(e)=>{        
+        if(bindenter.ifenter(e)){
+            this.handleSubmit(e)
+        }       
+    }
+      componentWillUnmount(){
+        // 解除绑定的回车事件
+        bindenter.removebindenter(this.keydown)
       }
       handleSubmit(e) {
         e.preventDefault();

@@ -8,6 +8,7 @@ var usersRouter = require('./routes/users');
 var hjb=require('./routes/hjb');
 var eth=require('./routes/eth');
 var test=require('./routes/test');
+var file=require('./routes/file');
 var bodyParser = require("body-parser");
 var expresssession=require("express-session")
 // var web=require("./web3")
@@ -51,6 +52,8 @@ app.use('/users', usersRouter);
 app.use('/hjb',hjb);
 // 处理以太币
 app.use('/eth',eth);
+// 文件传输
+app.use('/file',file);
 // 测试
 app.use('/test',test);
 // catch 404 and forward to error handler

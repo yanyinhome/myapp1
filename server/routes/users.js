@@ -5,15 +5,8 @@ var adminSQL=require('../db/adminSql');
 var DBconfig=require('../db/DBconfig');
 var frozenSql=require('../db/frozenSql');
 var responseClient=require("../util/util");
-var Web3=require("web3");
-var web3;
-//创建web3对象
-if (typeof web3 !== 'undefined') {
-   web3 = new Web3(web3.currentProvider);
-} else {
-  // set the provider you want from Web3.providers
-   web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.124.9:8486"));
-};
+var web=require("../web3")
+var web3=web.web3;
 // 引入数据库
 var mysql=require("mysql");
 // 创建数据库客户端
@@ -113,6 +106,8 @@ router.post("/nameChange",function(req,res,next){
        }
       }
     })
+  }else{
+    responseClient(res,200,1,"密码错误")
   }
 })
 // 用户信息获取处理

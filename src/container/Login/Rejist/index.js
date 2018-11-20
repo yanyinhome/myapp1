@@ -1,8 +1,9 @@
 import React,{Component} from "react";
-import {Input,Button,Form,Layout,Notification,Tag} from "element-react";
+import {Input,Button,Form,Layout,Notification} from "element-react";
 import './index.css'
 import "element-theme-default";
-import userServices from "../../../services/userServices"
+import userServices from "../../../services/userServices";
+import {bindenter,CheckNickName} from "../../../fun"
 export default class Regist extends Component{
     constructor(props) {
         super(props);
@@ -50,9 +51,25 @@ export default class Regist extends Component{
           }
         };
       }
+      // 绑定回车事件
+      componentDidMount(){
+        bindenter.bindenter(this.keydown)
+      }
+      // 解除回车事件
+      componentWillMount(){
+        bindenter.removebindenter(this.keydown);
+      }
+      // 回车事件
+      keydown=(e)=>{        
+        if(bindenter.ifenter(e)){
+          this.handleSubmit(e)
+       }    
+      }
+      // 转入登录页面
       tologin=()=>{
           this.props.history.push("/login")
       }
+      // 提交
       handleSubmit(e) {
         e.preventDefault();    
         this.refs.form.validate((valid) => {
@@ -87,16 +104,17 @@ export default class Regist extends Component{
             return false;
           }
         });
-      }      
+      }     
+      // form表单更改函数
       onChange(key, value) {
         this.setState({
           form: Object.assign({}, this.state.form, { [key]: value })
         });
-      } 
+      };
         //昵称检验
       checkNickName=(value)=>{
         if(value.length!==0){
-          userServices.checkNickName({nickname:value}).then(
+          CheckNickName(value).then(
             res=>{if(res.data.result.length===0){
               this.setState({checkresult:Object.assign({},this.state.checkresult,{message:"昵称可以使用",buttonvasible:false,type:"blue"})})
             }else{

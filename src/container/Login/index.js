@@ -2,7 +2,8 @@ import React,{Component} from "react";
 import {Button,Layout,Form,Input,Notification}  from "element-react";
 import "element-theme-default";
 import userService from "../../services/userServices";
-import "../Login/Rejist/index.css"
+import "../Login/Rejist/index.css";
+import {bindenter} from "../../fun";
 export default class Login extends Component{
     constructor(props) {
         super(props);      
@@ -36,8 +37,19 @@ export default class Login extends Component{
           }
         };
       }
-      componentDidMount(){
-        // 验证，做一个判断，如果已经登录则跳转
+      // 绑定回车事件
+      componentDidMount(){        
+        bindenter.bindenter(this.keydown)
+      }
+      // 回车事件
+      keydown=(e)=>{        
+        if(bindenter.ifenter(e)){
+          this.handleSubmit(e)
+       }    
+    } 
+      // 解除回车绑定
+      componentWillMount(){
+        bindenter.removebindenter(this.keydown);
       }
       handleSubmit(e) {
         e.preventDefault();
@@ -74,8 +86,7 @@ export default class Login extends Component{
         this.props.history.push("/regist")
     }
       handleReset(e) {
-        e.preventDefault();
-      
+        e.preventDefault();      
         this.refs.form.resetFields();
       }
       
