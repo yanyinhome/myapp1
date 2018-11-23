@@ -66,7 +66,7 @@
     "extract-text-webpack-plugin": "^3.0.2",
     "webpack": "^4.20.2"
   },
-  "proxy": "http://localhost:3005",
+  "proxy": "http://47.105.162.107:3005",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}"

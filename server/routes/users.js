@@ -23,7 +23,7 @@ client.connect((err,result)=>{
 // })
 // 登录验证处理
 router.post('/login', function(req, res, next) {
-  if(req.session.user&&req.cookies.user){   
+  if(req.session.user){   
     responseClient(res, 200, 1, '登录成功',{username:req.body.username})
   }else{
     let params=req.body;
@@ -44,7 +44,7 @@ router.post('/login', function(req, res, next) {
             }
             // 添加seesion和cookie验证
             req.session.user=user;
-            res.cookie('user', user, { expires: new Date(Date.now() + 900000), httpOnly: true });
+            // res.cookie('user', user, { expires: new Date(Date.now() + 900000), httpOnly: true });
             responseClient(res, 200, 1, '登录成功')
         }
         }
@@ -168,12 +168,12 @@ router.post('/usersearch', function(req, res, next) {
 // 注销登录
 router.get('/logout',function(req,res,next){
   delete req.session.user;//退出时删除保存的user
-  res.clearCookie(req.sessionID);//退出系统时清空cookie
+  // res.clearCookie(req.sessionID);//退出系统时清空cookie
   responseClient(res,200,1,"已注销")
 })
 // 管理页面登录
 router.post('/admin/login', function(req, res, next) {
-  if(req.session.admin&&req.cookies.admin){   
+  if(req.session.admin){   
     responseClient(res, 200, 1, '登录成功',{username:req.body.username})
   }else{
     let params=req.body;
@@ -194,7 +194,7 @@ router.post('/admin/login', function(req, res, next) {
             }
             // 添加seesion和cookie验证
             req.session.admin=admin;
-            res.cookie('user', admin, { expires: new Date(Date.now() + 900000), httpOnly: true });
+            // res.cookie('user', admin, { expires: new Date(Date.now() + 900000), httpOnly: true });
             let times=new Date().getTime();
             client.query(adminSQL.update_time,[times,admin.username],function(err,result){
               if(err){
@@ -233,7 +233,7 @@ router.get('/admin/admin_list',function(req,res,next){
 // 管理页面注销登录
 router.get('/admin/logout',function(req,res,next){
   delete req.session.admin;//退出时删除保存的user
-  res.clearCookie(req.sessionID);//退出系统时清空cookie
+  // res.clearCookie(req.sessionID);//退出系统时清空cookie
   responseClient(res,200,1,"已注销")
 })
 

@@ -32,8 +32,9 @@ app.use(logger('dev'));
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
 // 解决跨域问题,以及携带cookie问题
-app.use(require('cors')({credentials: true, origin: 'http://192.168.124.9:3000'}));
-app.use(cookieParser());
+// app.use(require('cors')());
+app.use(require('cors')({credentials: true, origin: 'http://localhost:3005'}));
+// app.use(cookieParser());
 app.use(expresssession(
   {secret:"123456",
     name:"testapp",
