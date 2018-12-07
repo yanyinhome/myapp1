@@ -12,5 +12,9 @@ var MessageSQL = {
     updateUserName:'UPDATE message SET username = ? WHERE username = ?',
     // 修改状态
     updateUserState:"UPDATE message SET state = ? WHERE address = ?",
+  //  查询未冻结账户列表
+    Search_accounts:"SELECT username,address,lasttime,times FROM message WHERE state=0",
+  //  修改登录次数
+    update_load_times:"UPDATE message SET times=times+1 WHERE username= ? ",
   };
 module.exports = MessageSQL;

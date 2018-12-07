@@ -1,6 +1,7 @@
 import React,{Component} from "react";
 import {Route,Switch} from 'react-router-dom';
 import Loadable from 'react-loadable';
+import './index.css';
 const Loading = () => <div>Loading...</div>;
 const Control=Loadable({
     loader:()=>import("./Control"),

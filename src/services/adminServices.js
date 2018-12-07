@@ -37,5 +37,6 @@ import Xhr from "../utils/xhr"
             url:`${this.url}/users/admin/admin_list`
         })
     }
+    
 }
 export default new adminService();

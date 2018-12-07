@@ -10,6 +10,17 @@ const Totime =(time)=>{
             var second = dt.getSeconds()+1<10? '0'+dt.getSeconds():dt.getSeconds();
             return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
 }
+//单击事件
+class  BindClick {
+    //添加绑定
+    bindclick(fun){
+        document.addEventListener(("click"),fun);
+    }
+    //解除绑定
+    removebindclick(fun){
+        document.addEventListener(("click"),fun);
+    }
+}
 // 回车事件
 class BindEnter{
     // 添加绑定
@@ -18,7 +29,7 @@ class BindEnter{
     }
     // 解除绑定
     removebindenter(fun){
-        document.removeEventListener("keydown",fun); 
+        document.removeEventListener("keydown",fun);
     }
     // 判断是否是回车事件
     ifenter(e){
@@ -29,11 +40,9 @@ class BindEnter{
 }
 // 模糊查询函数
 const DimSearch=(value,next)=>{
-    if(value.length!==0){
         userServices.usersearch({username:value,address:value}).then(res=>{
            next(res)
         }).catch(err=>{console.log(err)})
-    }
 }
 // 昵称验证函数
 const CheckNickName=(value)=>{
@@ -42,4 +51,5 @@ const CheckNickName=(value)=>{
     })
 }
 const bindenter=new BindEnter();
-export {Totime,bindenter,DimSearch,CheckNickName}
+const bindclick=new BindClick();
+export {Totime,bindenter,DimSearch,CheckNickName,bindclick}

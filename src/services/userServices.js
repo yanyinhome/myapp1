@@ -62,6 +62,12 @@ class userServices {
             method:"get",
             url:`${this.url}/users/frozen_accounts`
         })
+    }    // 查询未冻结用户列表
+    get_accounts(data){
+        return xhr({
+            method:"get",
+            url:`${this.url}/users/accounts`
+        })
     }
     // 查询冻结解冻操作的历史记录
     get_frozen_history(data){

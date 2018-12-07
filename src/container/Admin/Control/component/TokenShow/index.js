@@ -72,19 +72,20 @@ export default class TokenShow extends Component{
       const self = this;
       HjbService.HJBmessage().then(
         res=>{
-          if(res.code===0){
-            return
-          }else{
-            EthServices.EthPeers().then(
-              res=>{
-                self.setState({peermessage:res.data})
-              }
-            ).catch(err=>{console.log(err)})
-            self.setState({TokenMessage:[res.data]})
+          if(res.code){
+            if(res.code===0){
+              return
+            }else{
+              EthServices.EthPeers().then(
+                res=>{
+                  self.setState({peermessage:res.data})
+                }
+              ).catch(err=>{console.log(err)})
+              self.setState({TokenMessage:[res.data]})
+            }
           }
         }
       ).catch(err=>{console.log(err);});
-
     }    
     render() {
       return (

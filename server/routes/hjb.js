@@ -253,7 +253,7 @@ router.post('/hjb_frozen',function(req,res,next){
               console.log(err)
               responseClient(res,200,1,"冻结失败",{state:0,result:0})
             }else{
-              client.query(frozenSQL.insert_history,[username,address,1,times,adminer],function(err,result){
+              client.query(frozenSQL.insert_history,[username,address,1,times,adminer,result],function(err,result){
                 if(err){console.log(err)}
                   else{
                     console.log(result)
@@ -279,7 +279,7 @@ router.post('/hjb_frozen',function(req,res,next){
               console.log(err);
               responseClient(res,200,1,"解冻失败",{state:1,result:0,})
             }else{
-              client.query(frozenSQL.insert_history,[username,address,0,times,adminer],function(err,result){
+              client.query(frozenSQL.insert_history,[username,address,0,times,adminer,result],function(err,result){
                 if(err){console.log(err)}
                   else{
                     console.log(result)
@@ -337,7 +337,7 @@ router.post('/setprice',function(req,res,next){
               responseClient(res,200,1,"设置买入价格失败",{state:0,result:0})
             }else{
               const params=req.session.admin;
-              client.query(admin_setpriceSql.insert_history,[params.username,1,price,times],function(err,result){
+              client.query(admin_setpriceSql.insert_history,[params.username,1,price,times,result],function(err,result){
                 if(err){
                   console.log(err);
                 }else{
@@ -360,7 +360,7 @@ router.post('/setprice',function(req,res,next){
               responseClient(res,200,1,"设置卖出价格失败",{state:1,result:0})
             }else{
               const params=req.session.admin;
-              client.query(admin_setpriceSql.insert_history,[params.username,2,price,times    ],function(err,result){
+              client.query(admin_setpriceSql.insert_history,[params.username,2,price,times,result],function(err,result){
                 if(err){
                   console.log(err);
                 }else{
@@ -408,7 +408,7 @@ router.post('/add',function(req,res,next){
             responseClient(res,200,1,"增发失败")
           }else{
             console.log(req.body)
-            client.query(admin_minttokenSQL.insert_history,[admin_name,number,username,address,times],function(err,result){
+            client.query(admin_minttokenSQL.insert_history,[admin_name,number,username,address,times,result],function(err,result){
               if(err){
                 console.log(err)
               }else{
@@ -449,7 +449,7 @@ router.post('/setgas',function(req,res,next){
             console.log(err)
             responseClient(res,200,1,"修改阈值失败")
           }else{
-            client.query(admin_gasSQL.inserthistory,[admin_name,number,times],function(err,result){
+            client.query(admin_gasSQL.inserthistory,[admin_name,number,times,result],function(err,result){
               if(err){
                 console.log(err)
               }else{

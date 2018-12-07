@@ -2,8 +2,8 @@ import React,{Component} from "react";
 import {Button,Layout,Menu,Popover,Notification}  from "element-react";
 import "element-theme-default";
 import AdminService from "../../../services/adminServices";
+import fileService from "../../../services/fileServices";
 import {Route } from 'react-router-dom';
-import logo from '../../../../static/img/logo.png';
 import Loadable from 'react-loadable';
 const Loading = () => <div>Loading...</div>;
 const TokenShow=Loadable({
@@ -40,7 +40,8 @@ export default class Control extends Component{
         this.state={
             username:"未登录",
             loadout_display:"none",
-            visible:null
+            visible:null,
+            logo:'http://192.168.124.9:3005/uploads/logo.png',
       }}
       componentDidMount(){
         AdminService.getadmininfo().then(res=>{
@@ -60,7 +61,17 @@ export default class Control extends Component{
         }).catch(err=>{
           console.log(err)
         })
+      //查询logo地址
+          this.getLogoAddress();
       }
+      //查询logo地址
+    getLogoAddress=()=>{
+        fileService.getLogoAddress().then(
+            res=>{
+                this.setState({logo:res.data.result.url})
+            }
+        ).catch(err=>{console.log(err)})
+    }
       // loadout=()=>{
       //   this.setState({loadout_display:"block"})
       // }
@@ -131,7 +142,7 @@ export default class Control extends Component{
         return (
               <Layout.Row>
                   <Layout.Col span="3" style={{backgroundColor:"#324157",boxShadow:"-4px 0 6px rgba(0,0,0,.15) inset",height:"100%",position:"fixed",zIndex:"999",minWidth:"220px"}}>
-                    <img src={logo} alt="logo" style={{width:"auto",height:"50px",display:"block",margin:"20px auto"}}></img>
+                    <img src={this.state.logo} alt="logo" style={{width:"auto",height:"50px",display:"block",margin:"20px auto"}}></img>
                     <h5 style={{padding:"8px 15px",margin:"10px",background: "rgba(255,255,255,.4)",borderRadius:"4px"}}>{this.state.username}&nbsp;&nbsp;管理员 
                     <span style={{display:"inline-block",float:"right",marginRight:"20px",cursor:"pointer"}} onClick={()=>{console.log("1")}}>退出</span>
                     {/* <Popover placement="bottom" width="160" trigger="click" visible={this.state.visible}  content={(
@@ -161,7 +172,7 @@ export default class Control extends Component{
                       </Menu.SubMenu>
                     </Menu>
                   </Layout.Col>
-                  <Layout.Col span="21" style={{position:"fixed",padding:"20px 25px 20px",background:"#ddd",height:"100%",marginLeft:"220px"}}>
+                  <Layout.Col span="21" style={{minHeight:"940px",padding:"20px 25px 200px",background:"#ddd",height:"100%",marginLeft:"220px"}}>
                     <Route path={`${this.props.match.url}`} exact component={TokenShow}></Route>
                     <Route path={`${this.props.match.url}/token1`}  component={FozenAccount}></Route>
                     <Route path={`${this.props.match.url}/token2`}  component={ SetPrice}></Route>

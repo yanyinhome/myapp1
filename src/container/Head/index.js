@@ -106,7 +106,7 @@ export default class Head extends  Component{
             })
     }
     componentWillMount(){
-        // document.removeEventListener("click",this.loadouthide)
+        document.removeEventListener("click",this.loadouthide)
     }
     render(){
         let loadshow=null;
